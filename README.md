@@ -4,7 +4,7 @@ This is a mini project using CUDA programming. This is only for educational purp
 This project will be based off comparing two version of fractal techniques (i.e. L-System, Random Fractals, IFS, ETF, etc.) based off performance and efficiency.
 
 Implementation Roles
-------
+--------------------
 WhyKay92:
 - ETF | Mandelbrot
 - IFS | Koch Snowflake [Good to have]
