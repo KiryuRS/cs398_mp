@@ -18,5 +18,5 @@ CJ:
 - L-System | Fractal Tree
 
 Koori:
-- Attractors | -research-
+- Strange Attractors | Classical Hénon map
 - FSR | Sierpinski carpet / Cantor set
