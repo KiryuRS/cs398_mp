@@ -74,6 +74,7 @@ int main(int argc, char **argv)
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
 	uchar				cpuOutput[PIXELDIM3]{ 0 };
+  uchar       *cpuOutputPtr;
 	uchar				*gpuOutput = nullptr;
 
 	// Printing the information
@@ -101,10 +102,9 @@ int main(int argc, char **argv)
     //header.colors = 0;
     //header.important_colors = 0;
 
-    uchar* test;
-    bmp_read("blank_bmp.bmp", &header, &test);
-    header.h_resolution = 3800;
-    header.v_resolution = 3800;
+    bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
+    header.h_resolution = 8192;
+    header.v_resolution = 8192;
 
 	sdkCreateTimer(&hTimer);
 	sdkDeleteTimer(&hTimer);
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 
 #elif defined ALVIN_VERSION
-    HenonCPU(cpuOutput);
+    HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
 
 #elif defined KENNETH_VERSION
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 	cpuOutputFile += fileOut + ".bmp";
 	char* out = new char[PIXELDIM3]{};
 	//MyCopy(std::begin(cpuOutput), std::end(cpuOutput), out);
-	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutput);
+	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
 
 	std::string gpuOutputFile{ "gpuOutput" };
 	gpuOutputFile += fileOut + ".bmp";
