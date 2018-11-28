@@ -11,11 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Alvin.cpp" />
+    <ClCompile Include="src\ChengJiang.cpp" />
     <ClCompile Include="src\cpu.cpp" />
+    <ClCompile Include="src\Kenneth.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\YongKiat.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Alvin.h" />
+    <ClInclude Include="src\ChengJiang.h" />
     <ClInclude Include="src\heat.h" />
+    <ClInclude Include="src\Kenneth.h" />
+    <ClInclude Include="src\YongKiat.h" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\kernel.cu" />
