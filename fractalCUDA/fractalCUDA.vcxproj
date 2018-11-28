@@ -11,22 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Alvin.cpp" />
-    <ClCompile Include="src\ChengJiang.cpp" />
-    <ClCompile Include="src\cpu.cpp" />
-    <ClCompile Include="src\Kenneth.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\YongKiat.cpp" />
+    <ClCompile Include="bmp.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Alvin.h" />
-    <ClInclude Include="src\ChengJiang.h" />
-    <ClInclude Include="src\heat.h" />
-    <ClInclude Include="src\Kenneth.h" />
-    <ClInclude Include="src\YongKiat.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <CudaCompile Include="src\kernel.cu" />
+    <ClInclude Include="bmp.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="edge.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C144999E-B9AD-4C28-B718-541D736F1BDD}</ProjectGuid>
@@ -68,6 +59,7 @@
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>false</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v9.2\common\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

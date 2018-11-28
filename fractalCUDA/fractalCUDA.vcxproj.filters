@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Yong Kiat">
+      <UniqueIdentifier>{1e69e020-055c-44ec-ab12-d70ff4bbb52d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Alvin">
+      <UniqueIdentifier>{24975caa-e8b0-440d-91c1-1259fe32f36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cheng Jiang">
+      <UniqueIdentifier>{edea3468-5718-4fc5-b4dc-8f1aa3457d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Kenneth">
+      <UniqueIdentifier>{ab4b5520-f97c-49c1-a07e-1f943cf67bb1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
