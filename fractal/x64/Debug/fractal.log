@@ -1,0 +1,6 @@
+﻿  render_point.cpp
+  WinMain.cpp
+c:\users\alvin.tan\cs398_mp\fractal\winmain.cpp(45): warning C4244: 'return': conversion from 'WPARAM' to 'int', possible loss of data
+  Generating Code...
+  fractal.vcxproj -> C:\Users\alvin.tan\cs398_mp\x64\Debug\fractal.exe
+  fractal.vcxproj -> C:\Users\alvin.tan\cs398_mp\x64\Debug\fractal.pdb (Partial PDB)

@@ -1,11 +1,8 @@
 // @TODO: Uncomment the codes below to run the relevant test case
-#define YONGKIAT_VERSION
-//#define ALVIN_VERSION
+//#define YONGKIAT_VERSION
+#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION
 //#define KENNETH_VERSION
-
-#define PIXELDIM		512
-static constexpr size_t PIXELDIM3 =	PIXELDIM * PIXELDIM * 3;
 
 #include "Common.h"
 
@@ -76,7 +73,7 @@ int main(int argc, char **argv)
 	StopWatchInterface	*hTimer = nullptr;
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
-	uchar				cpuOutput[PIXELDIM3]{ };
+	uchar				cpuOutput[PIXELDIM3]{ 0 };
 	uchar				*gpuOutput = nullptr;
 
 	// Printing the information
@@ -87,6 +84,27 @@ int main(int argc, char **argv)
 	printf("CUDA device [%s] has %d Multi-Processors, Compute %d.%d\n",
 		   deviceProp.name, deviceProp.multiProcessorCount, deviceProp.major, deviceProp.minor);
 	PrintInformation(deviceProp);
+
+    // Setup bmp_header
+    //header.id1 = 'B';
+    //header.id2 = 'M';
+    //header.file_size = PIXELDIM3;
+    //header.reserved = 0;
+    //header.bmp_data_offset = 54;
+    //header.bmp_header_size = sizeof(bmp_header);
+    //header.width    = PIXELDIM;
+    //header.height   = PIXELDIM;
+    //header.planes = 1;
+    //header.bits_per_pixel = 24;
+    //header.h_resolution = 3800;
+    //header.v_resolution = 3800;
+    //header.colors = 0;
+    //header.important_colors = 0;
+
+    uchar* test;
+    bmp_read("blank_bmp.bmp", &header, &test);
+    header.h_resolution = 3800;
+    header.v_resolution = 3800;
 
 	sdkCreateTimer(&hTimer);
 	sdkDeleteTimer(&hTimer);
@@ -111,7 +129,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 
 #elif defined ALVIN_VERSION
-
+    HenonCPU(cpuOutput);
 #elif defined CHENGJIANG_VERSION
 
 #elif defined KENNETH_VERSION
@@ -149,8 +167,8 @@ int main(int argc, char **argv)
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
 	char* out = new char[PIXELDIM3]{};
-	MyCopy(cpuOutputFile.begin(), cpuOutputFile.end(), out);
-	bmp_write(out, &header, cpuOutput);
+	//MyCopy(std::begin(cpuOutput), std::end(cpuOutput), out);
+	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutput);
 
 	std::string gpuOutputFile{ "gpuOutput" };
 	gpuOutputFile += fileOut + ".bmp";

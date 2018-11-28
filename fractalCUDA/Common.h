@@ -29,6 +29,8 @@ typedef long long					llong;
 #endif
 
 #define UINT_BITS					32
+#define PIXELDIM		            512
+static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 
 ///////////////////////////////////////////////////////////////////////////
 // CUDA Includes
@@ -49,3 +51,8 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 		*start++ = *begin++;
 	return start;
 }
+
+///////////////////////////////////////////////////////////////////////////
+// Fractals Includes
+///////////////////////////////////////////////////////////////////////////
+#include "henon.h"
