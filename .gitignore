@@ -21,3 +21,5 @@ x64/Release/fractalCUDA.ipdb
 x64/Release/fractalCUDA.lib
 x64/Release/fractalCUDA.pdb
 fractalCUDA/x64/Release/cpu.obj
+v15/ipch
+v15/Browse.VC.db
