@@ -14,4 +14,13 @@
       <UniqueIdentifier>{ab4b5520-f97c-49c1-a07e-1f943cf67bb1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bmp.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bmp.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="edge.h" />
+  </ItemGroup>
 </Project>
