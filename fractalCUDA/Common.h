@@ -10,6 +10,8 @@
 #include <string>
 #include <cstdint>
 #include <fstream>
+#include <thread>
+#include <chrono>
 #include "bmp.h"
 
 typedef unsigned int				uint;

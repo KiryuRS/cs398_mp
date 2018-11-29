@@ -107,7 +107,6 @@ int main(int argc, char **argv)
     header.v_resolution = 8192;
 
 	sdkCreateTimer(&hTimer);
-	sdkDeleteTimer(&hTimer);
 
 	// Some variable naming here
 #ifdef YONGKIAT_VERSION
@@ -136,10 +135,10 @@ int main(int argc, char **argv)
 
 #endif
 	sdkStopTimer(&hTimer);
-	float dAvgSecs = 1.0e-3f * (float)sdkGetTimerValue(&hTimer);
-	printf("\nCPU time (average) : %.5f sec, %.4f MB/sec\n", dAvgSecs, ((float)PIXELDIM3 * 1.0e-6f) / dAvgSecs);
+	double dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
+	printf("\nCPU time (average) : %.5f sec, %.4f MB/sec\n", dAvgSecs, ((double)PIXELDIM3 * 1.0e-6) / dAvgSecs);
 	printf("CPU Fractal, Throughput = %.4f MB/s, Time = %.5f s, Size = %zu Bytes, NumDevsUsed = %u\n",
-		(1.0e-6f * (float)PIXELDIM3 / dAvgSecs), dAvgSecs, PIXELDIM3, 1u);
+		(1.0e-6 * (double)PIXELDIM3 / dAvgSecs), dAvgSecs, PIXELDIM3, 1u);
 
 	// GPU  CODE HERE
 	sdkResetTimer(&hTimer);
@@ -157,10 +156,12 @@ int main(int argc, char **argv)
 
 #endif
 	sdkStopTimer(&hTimer);
-	dAvgSecs = 1.0e-3f * (float)sdkGetTimerValue(&hTimer);
-	printf("\nGPU time (average) : %.5f sec, %.4f MB/sec\n", dAvgSecs, ((float)PIXELDIM3 * 1.0e-6f) / dAvgSecs);
+	dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
+	printf("\nGPU time (average) : %.5f sec, %.4f MB/sec\n", dAvgSecs, ((double)PIXELDIM3 * 1.0e-6) / dAvgSecs);
 	printf("GPU Fractal, Throughput = %.4f MB/s, Time = %.5f s, Size = %zu Bytes, NumDevsUsed = %u\n",
-		(1.0e-6f * (float)PIXELDIM3 / dAvgSecs), dAvgSecs, PIXELDIM3, 1u);
+		(1.0e-6 * (double)PIXELDIM3 / dAvgSecs), dAvgSecs, PIXELDIM3, 1u);
+
+	sdkDeleteTimer(&hTimer);
 
 #pragma region COPYOUT
 	// Copying the contents over to our output file

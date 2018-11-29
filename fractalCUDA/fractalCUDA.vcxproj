@@ -18,7 +18,6 @@
   <ItemGroup>
     <ClInclude Include="bmp.h" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="edge.h" />
     <ClInclude Include="henon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
