@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
     HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
-
+	BurningShipCPU(cpuOutputPtr);
 #elif defined KENNETH_VERSION
 
 #endif
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION
-
+	BurningShipGPU(gpuOutput);
 #elif defined KENNETH_VERSION
 
 #endif
