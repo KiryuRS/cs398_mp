@@ -20,6 +20,9 @@
     <ClCompile Include="henon.cpp">
       <Filter>Alvin</Filter>
     </ClCompile>
+    <ClCompile Include="BurningShip.cpp">
+      <Filter>Cheng Jiang</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -27,6 +30,9 @@
     <ClInclude Include="edge.h" />
     <ClInclude Include="henon.h">
       <Filter>Alvin</Filter>
+    </ClInclude>
+    <ClInclude Include="BurningShip.h">
+      <Filter>Cheng Jiang</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

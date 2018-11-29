@@ -57,3 +57,4 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 // Fractals Includes
 ///////////////////////////////////////////////////////////////////////////
 #include "henon.h"
+#include "BurningShip.h"
