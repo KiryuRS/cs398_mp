@@ -12,6 +12,8 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
+#include <cmath>
+#include <ctime>
 #include "bmp.h"
 
 typedef unsigned int				uint;
@@ -59,3 +61,4 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 // Fractals Includes
 ///////////////////////////////////////////////////////////////////////////
 #include "henon.h"
+#include "BrownianTree.h"

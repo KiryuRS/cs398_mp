@@ -1,8 +1,8 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_VERSION
-#define ALVIN_VERSION
+//#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION
-//#define KENNETH_VERSION
+#define KENNETH_VERSION
 
 #include "Common.h"
 
@@ -73,8 +73,7 @@ int main(int argc, char **argv)
 	StopWatchInterface	*hTimer = nullptr;
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
-	uchar				cpuOutput[PIXELDIM3]{ 0 };
-  uchar       *cpuOutputPtr;
+	uchar				*cpuOutput = nullptr;
 	uchar				*gpuOutput = nullptr;
 
 	// Printing the information
@@ -102,7 +101,7 @@ int main(int argc, char **argv)
     //header.colors = 0;
     //header.important_colors = 0;
 
-    bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
+    bmp_read("blank_bmp.bmp", &header, &cpuOutput);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
 
@@ -128,11 +127,11 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 
 #elif defined ALVIN_VERSION
-    HenonCPU(cpuOutputPtr);
+    HenonCPU(cpuOutput);
 #elif defined CHENGJIANG_VERSION
 
 #elif defined KENNETH_VERSION
-
+	BrownianCPU(cpuOutput);
 #endif
 	sdkStopTimer(&hTimer);
 	double dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
@@ -167,9 +166,7 @@ int main(int argc, char **argv)
 	// Copying the contents over to our output file
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
-	char* out = new char[PIXELDIM3]{};
-	//MyCopy(std::begin(cpuOutput), std::end(cpuOutput), out);
-	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
+	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutput);
 
 	std::string gpuOutputFile{ "gpuOutput" };
 	gpuOutputFile += fileOut + ".bmp";
@@ -178,14 +175,14 @@ int main(int argc, char **argv)
 		std::cerr << "..Please allocate memory for gpuOutput!\nUnable to output file into a bmp file!" << std::endl;
 		return -1;
 	}
-	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
-	bmp_write(out, &header, gpuOutput);
-	delete[] out;
+	bmp_write((char*)gpuOutputFile.c_str(), &header, gpuOutput);
 #pragma endregion
 
 	std::string command;
 	command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
 	system(command.c_str());
+
+	delete[] cpuOutput;
 
 	return 0;
 }

@@ -20,12 +20,18 @@
     <ClCompile Include="henon.cpp">
       <Filter>Alvin</Filter>
     </ClCompile>
+    <ClCompile Include="BrownianTree.cpp">
+      <Filter>Kenneth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="henon.h">
       <Filter>Alvin</Filter>
+    </ClInclude>
+    <ClInclude Include="BrownianTree.h">
+      <Filter>Kenneth</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
