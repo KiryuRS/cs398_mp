@@ -126,7 +126,8 @@ int main(int argc, char **argv)
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_VERSION
-	MandrelbrotCPU(cpuOutputPtr);
+	//MandrelbrotCPU(cpuOutputPtr);
+	//RunKoch(cpuOutputPtr);
 #elif defined ALVIN_VERSION
     HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
@@ -147,7 +148,7 @@ int main(int argc, char **argv)
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_VERSION
-	MandrelbrotGPU(cpuOutputPtr);
+	MandrelbrotGPU(gpuOutput);
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION

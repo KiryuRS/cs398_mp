@@ -26,6 +26,9 @@
     <ClCompile Include="MandrelBrot.cpp">
       <Filter>Yong Kiat</Filter>
     </ClCompile>
+    <ClCompile Include="Koch.cpp">
+      <Filter>Yong Kiat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -37,6 +40,9 @@
       <Filter>Cheng Jiang</Filter>
     </ClInclude>
     <ClInclude Include="MandrelBrot.h">
+      <Filter>Yong Kiat</Filter>
+    </ClInclude>
+    <ClInclude Include="Koch.h">
       <Filter>Yong Kiat</Filter>
     </ClInclude>
   </ItemGroup>

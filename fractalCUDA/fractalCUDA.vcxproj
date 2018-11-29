@@ -14,6 +14,7 @@
     <ClCompile Include="bmp.cpp" />
     <ClCompile Include="BurningShip.cpp" />
     <ClCompile Include="henon.cpp" />
+    <ClCompile Include="Koch.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MandrelBrot.cpp" />
   </ItemGroup>
@@ -22,6 +23,7 @@
     <ClInclude Include="BurningShip.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="henon.h" />
+    <ClInclude Include="Koch.h" />
     <ClInclude Include="MandrelBrot.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
