@@ -1,6 +1,6 @@
 // @TODO: Uncomment the codes below to run the relevant test case
-//#define YONGKIAT_VERSION
-#define ALVIN_VERSION
+#define YONGKIAT_VERSION
+//#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION
 //#define KENNETH_VERSION
 
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_VERSION
-
+	MandrelbrotCPU(cpuOutputPtr);
 #elif defined ALVIN_VERSION
     HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_VERSION
-
+	MandrelbrotGPU(cpuOutputPtr);
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION

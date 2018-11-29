@@ -23,6 +23,9 @@
     <ClCompile Include="BurningShip.cpp">
       <Filter>Cheng Jiang</Filter>
     </ClCompile>
+    <ClCompile Include="MandrelBrot.cpp">
+      <Filter>Yong Kiat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -32,6 +35,9 @@
     </ClInclude>
     <ClInclude Include="BurningShip.h">
       <Filter>Cheng Jiang</Filter>
+    </ClInclude>
+    <ClInclude Include="MandrelBrot.h">
+      <Filter>Yong Kiat</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
