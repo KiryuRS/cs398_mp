@@ -1,14 +1,23 @@
 #include "BrownianTree.h"
 
-void DrawBrownianTree(uchar* data) {
+void BrownianSetData(uint x, uint y, uchar value, uchar* data)
+{
+	data[x + PIXELDIM * y] = value;								// b
+	data[x + PIXELDIM * y + PIXELDIM2] = value;					// g
+	data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = value;		// r
+}
+
+void BrownianCPU(uchar* data)
+{
+	uchar *input = new uchar[PIXELDIM * PIXELDIM]{ };
+	srand((unsigned)time(nullptr));
 	int px, py; // particle values
 	int dx, dy; // offsets
-	int i;
 
 	// set the seed
-	data[(rand() % PIXELDIM) * PIXELDIM + rand() % PIXELDIM] = 1;
+	input[(rand() % PIXELDIM) * PIXELDIM + rand() % PIXELDIM] = 1;
 
-	for (i = 0; i < NUM_PARTICLES; i++) {
+	for (int i = 0; i != 100000; ++i) {
 		// set particle's initial position
 		px = rand() % PIXELDIM;
 		py = rand() % PIXELDIM;
@@ -23,9 +32,9 @@ void DrawBrownianTree(uchar* data) {
 				px = rand() % PIXELDIM;
 				py = rand() % PIXELDIM;
 			}
-			else if (data[(py + dy) * PIXELDIM + px + dx] != 0) {
+			else if (input[(py + dy) * PIXELDIM + px + dx] != 0) {
 				// bumped into something
-				data[py * PIXELDIM + px] = 1;
+				input[py * PIXELDIM + px] = 1;
 				break;
 			}
 			else {
@@ -34,38 +43,13 @@ void DrawBrownianTree(uchar* data) {
 			}
 		}
 	}
-}
 
-__forceinline size_t Map(const double& x, const double& min, const double& max)
-{
-	return static_cast<size_t>(PIXELDIM * (x - min) / (max - min));
-}
-
-__forceinline void SetData(const double& x, const double& y, uchar* data)
-{
-	static constexpr double xMIN = -1.41;
-	static constexpr double xMAX = 1.41;
-	static constexpr double yMIN = -0.42;
-	static constexpr double yMAX = 0.42;
-	size_t index = Map(y, yMIN, yMAX) * PIXELDIM + Map(x, xMIN, xMAX);
-	if (index < PIXELDIM2)
-	{
-		data[index] = 0x00; // b
-		data[index + PIXELDIM2] = 0x00; // g
-		data[index + PIXELDIM2 + PIXELDIM2] = 0xff; // r
-	}
-}
-
-void BrownianCPU(uchar* data)
-{
-	uchar* cpuIn = new uchar[PIXELDIM * PIXELDIM];
-	srand((unsigned)time(nullptr));
-
-	DrawBrownianTree(cpuIn);
-
-	for (uint y = 0; y != PIXELDIM; ++y)
-		for (uint x = 0; x != PIXELDIM; ++x)
+	for (uint i = 0; i != PIXELDIM; ++i)
+		for (uint j = 0; j != PIXELDIM; ++j)
 		{
-
+			uchar rgb = input[i * PIXELDIM + j] ? 255 : 0;
+			BrownianSetData(i, j, rgb, data);
 		}
+
+	delete[] input;
 }
