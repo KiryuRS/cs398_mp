@@ -1,79 +1,142 @@
 #include "Koch.h"
 
+#define PI 3.14159265359
+#define iterationBS 64 
+#define magBS 2.5
+#define shiftBS -PIXELDIM/2.0
+#define shiftBS2 -PIXELDIM/1.5
 
 
-void KochCPU(list<Line*>& lines)
+
+void KochSetData(int x, int y, int value, uchar* data)
 {
-	list<Line*> newlines;
-	list<Line*> TobeDeleteLine;
-
-	for (auto itr = lines.begin(); itr != lines.end(); itr++)
+	if (value == 0)
 	{
-		double xl1 = (*itr)->x;
-		double yl1 = (*itr)->y;
-		double lenl1 = (*itr)->len / 3;
-		double angl1 = (*itr)->ang;
-
-		double xl2 = (*itr)->x + (cos((*itr)->ang*(PI / 180.0))*(*itr)->len / 1.5);
-		double yl2 = (*itr)->y + (sin((*itr)->ang*(PI / 180.0))*(*itr)->len / 1.5);
-		double lenl2 = (*itr)->len / 3;
-		double angl2 = (*itr)->ang;
-
-		double xl3 = (*itr)->x + (cos((*itr)->ang*(PI / 180.0))*(*itr)->len / 3.0);
-		double yl3 = (*itr)->y + (sin((*itr)->ang*(PI / 180.0))*(*itr)->len / 3.0);
-		double lenl3 = (*itr)->len / 3.0;
-		double angl3 = (*itr)->ang- 300.0;
-
-		double xl4 = (*itr)->x + (cos((*itr)->ang*(PI / 180.0))*((*itr)->len / 1.5));
-		double yl4 = (*itr)->y + (sin((*itr)->ang*(PI / 180.0))*((*itr)->len / 1.5));
-		double lenl4 = (*itr)->len / 3.0;
-		double angl4 = (*itr)->ang- 240.0;
-
-		xl4 = xl4 + cos(angl4*(PI / 180.0))*lenl4;
-		yl4 = yl4 + sin(angl4*(PI / 180.0))*lenl4;
-		angl4 -= 180.0;
-
-		newlines.push_back(new Line(xl1, yl1, lenl1, angl1));
-		newlines.push_back(new Line(xl2, yl2, lenl2, angl2));
-		newlines.push_back(new Line(xl3, yl3, lenl3, angl3));
-		newlines.push_back(new Line(xl4, yl4, lenl4, angl4));
-
-		//...for deleting itself!
-		TobeDeleteLine.push_back((*itr));
+		data[x + PIXELDIM * y] = 0xad; // b
+		data[x + PIXELDIM * y + PIXELDIM2] = 0x16; // g
+		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0x89; // r
 	}
-	for (auto itr = newlines.begin(); itr != newlines.end(); itr++)
-		lines.push_back((*itr)); //Adding new Line*(s)
-
-	for (auto itr = TobeDeleteLine.begin(); itr != TobeDeleteLine.end(); itr++)
+	else
 	{
-		lines.remove((*itr)); //Deleting new Line*(s)
-		delete (*itr);
+		data[x + PIXELDIM * y] = value; // b
+		data[x + PIXELDIM * y + PIXELDIM2] = value; // g
+		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
 	}
 }
 
-void RunKoch(uchar * data)
+void DrawLine(int x1, int y1, int x2, int y2, uchar * data)
 {
-	std::list<Line*> lines;
-	lines.push_back(new Line(412, 150, 312, 180.0));
-	lines.push_back(new Line(100, 150, 312, 60.0));
-	Line* line = new Line(412, 150, 312, 120);
-	line->x += cos(line->ang * (PI / 180))*line->len;
-	line->y += cos(line->ang * (PI / 180))*line->len;
-	line->ang -= 180;
-	lines.push_back(line);
-	
-	
-	for (auto itr = lines.begin(); itr != lines.end(); itr++)
+	int dx = x2 - x1;
+	int dy = y2 - y1;
+
+	if (std::abs(dy) > std::abs(dx))
 	{
-		(*itr)->draw((*itr)->x, (*itr)->y, 0, data);
-		
-		
+		int absY = std::abs(dy);
+		float deltaX = static_cast<float>(dx) / absY;
+
+		float startX = x1 - deltaX;
+
+		if (y2 > y1)
+		{
+			for (int y_i = y1; y_i < y2; y_i++)
+			{
+				startX += deltaX;
+
+				data[static_cast<int>(startX) + PIXELDIM * y_i] = 0x00; // b
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2] = 0x00; // g
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+			}
+		}
+		else
+		{
+			for (int y_i = y1; y_i > y2; y_i--)
+			{
+				startX += deltaX;
+				data[static_cast<int>(startX) + PIXELDIM * y_i] = 0x00; // b
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2] = 0x00; // g
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+			}
+		}
+
 	}
-	Sleep(2500);
-	KochCPU(lines);
+	else
+	{
+		int absX = std::abs(dx);
+		float deltaY = static_cast<float>(dy) / absX;
+
+		float startY = y1 - deltaY;
+
+		if (x2 > x1)
+		{
+			for (int x_i = x1; x_i < x2; x_i++)
+			{
+				startY += deltaY;
+				data[x_i + PIXELDIM * static_cast<int>(startY)] = 0x00; // b
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2] = 0x00; // g
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+			}
+		}
+		else
+		{
+			for (int x_i = x1; x_i > x2; x_i--)
+			{
+				startY += deltaY;
+				data[x_i + PIXELDIM * static_cast<int>(startY)] = 0x00; // b
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2] = 0x00; // g
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+			}
+		}
+	}
+
+}
+
+
+void KochGPU(uchar * data)
+{
+}
+
+
+void KochCPU(uchar * data)
+{
+	int x1 = PIXELDIM/2, y1 = 200, x2 = PIXELDIM/2, y2 = 200;
+	for (int j = 0; j < PIXELDIM; ++j)
+	{
+		for (int i = 0; i < PIXELDIM; ++i)
+		{
+			
+			KochRecursive(x1, y1, x2, y2, iterationBS);
+			int value = int(255 * (1 - iterationBS) / iterationBS);
+			KochSetData(i, j, value, data);
+
+		}
 	
-		
-	
-	for (auto itr = lines.begin(); itr != lines.end(); itr++)
-		delete (*itr); //Deleting all lines at the end of a program
+	}
+}
+
+void KochRecursive(int x1, int y1, int x2, int y2, int itr)
+{
+	float angle = 60 * PI / 180;
+	int x3 = (2 * x1 + x2) / 3;
+	int y3 = (2 * y1 + y2) / 3;
+
+	int x4 = (x1 + 2 * x2) / 3;
+	int y4 = (y1 + 2 * y2) / 3;
+
+	int x = x3 + (x4 - x3)*cos(angle) + (y4 - y3)*sin(angle);
+	int y = y3 + (x4 - x3)*sin(angle) + (y4 - y3)*sin(angle);
+
+	if (itr > 0)
+	{
+		KochRecursive(x1, y1, x3, y3, itr - 1);
+		KochRecursive(x3, y3, x, y, itr - 1);
+		KochRecursive(x, y, x4, y4, itr - 1);
+		KochRecursive(x4, y4, x2, y2, itr - 1);
+	}
+	else
+	{
+		//line(x1, y1, x3, y3);
+		//line(x3, y3, x, y);
+		//line(x, y, x4, y4);
+		//line(x4, y4, x2, y2);
+	}
 }

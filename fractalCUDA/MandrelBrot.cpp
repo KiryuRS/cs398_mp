@@ -46,7 +46,7 @@ void MandrelbrotCPU(uchar* data)
 	//		//std::cout << " start " << x << " " << y << std::endl;
 	//		for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) {
 	//			double c = a*a - b*b + x;
-	//			b = 2.0*std::fabs(a*b) + y;
+	//			b = 2.0*a*b + y;
 	//			a = c;
 	//			norm2 = a*a + b*b;
 	//			//std::cout << a << " " << b << std::endl;
@@ -54,22 +54,24 @@ void MandrelbrotCPU(uchar* data)
 	//		}
 	//		int value = int(255 * (1 - double(n) / iterationBS));
 	//		//std::cout << n << " ";
-	//		BurningShipSetData(i, j, value, data);
+	//		MandrelBrotSetData(i, j, value, data);
 	//	}
 	//	//std::cout << std::endl;
 	//	//BitBlt(dc, j, 0, 1, rect.bottom, buffer_dc, j, 0, SRCCOPY);
 	//}
-
 	int value = 0;
-	for (int j = 0; j < PIXELDIM; ++j) {
-		for (int i = 0; i < PIXELDIM; ++i) {
+	for (int j = 0; j < PIXELDIM; ++j) 
+	{
+		for (int i = 0; i < PIXELDIM; ++i)
+		{
 
 			double a = 0.0, b = 0.0, norm2 = 0.0;
 			int n;
 			double x = static_cast<double>(i + shiftBS2) *magBS / PIXELDIM;
 			double y = static_cast<double>(PIXELDIM - 1 - j + shiftBS) *magBS / PIXELDIM;
 			//std::cout << " start " << x << " " << y << std::endl;
-			for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) {
+			for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) 
+			{
 				double c = a*a - b*b + x;
 				b = 2.0*a*b + y;
 				a = c;
