@@ -149,7 +149,7 @@ int main(int argc, char **argv)
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_VERSION
-	KochGPU(gpuOutput);
+	//MandrelbrotGPU(gpuOutput);
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION

@@ -1,10 +1,10 @@
-#include "BurningShip.h"
+#include "MandrelBrot.h"
 #include <iostream>
 //#define iterationBS 64 
 //#define magBS 0.2
 //#define shiftBS -PIXELDIM/1.6
 //#define shiftBS2 -PIXELDIM/0.111
-
+//#include "MandrelBrot.cu"
 #define iterationBS 64 
 #define magBS 2.5
 #define shiftBS -PIXELDIM/2.0
@@ -26,9 +26,9 @@ void MandrelBrotSetData(int x, int y, int value, uchar* data)
 	}
 }
 
-void MandrelbrotGPU(uchar*)
+void MandrelbrotGPU(uchar* data)
 {
-
+	//MandreGPU(data);
 }
 
 

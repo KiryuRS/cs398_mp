@@ -46,4 +46,9 @@
       <Filter>Yong Kiat</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="Mandrelbrot.cu">
+      <Filter>Yong Kiat</Filter>
+    </CudaCompile>
+  </ItemGroup>
 </Project>

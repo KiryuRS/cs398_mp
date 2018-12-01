@@ -20,3 +20,9 @@ CJ:
 Koori:
 - Strange Attractors | Classical Hénon map
 - FSR | Sierpinski carpet / Cantor set
+
+
+
+Additional Notes 
+https://github.com/blipson/CudaParticles/tree/master/ProjectCode 
+Above link contains links for Fractal Trees, Mandrelbrot and Koch

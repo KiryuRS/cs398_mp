@@ -26,6 +26,9 @@
     <ClInclude Include="Koch.h" />
     <ClInclude Include="MandrelBrot.h" />
   </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="Mandrelbrot.cu" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C144999E-B9AD-4C28-B718-541D736F1BDD}</ProjectGuid>
     <RootNamespace>simpleCuda</RootNamespace>

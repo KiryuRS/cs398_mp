@@ -5,4 +5,5 @@
 
 void MandrelbrotCPU(uchar* data);
 
-void MandrelbrotGPU(uchar* data);
+
+ void MandrelbrotGPU(uchar* data);

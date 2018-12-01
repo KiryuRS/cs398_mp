@@ -8,23 +8,9 @@
 
 
 
-void KochSetData(int x, int y, int value, uchar* data)
-{
-	if (value == 0)
-	{
-		data[x + PIXELDIM * y] = 0xad; // b
-		data[x + PIXELDIM * y + PIXELDIM2] = 0x16; // g
-		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0x89; // r
-	}
-	else
-	{
-		data[x + PIXELDIM * y] = value; // b
-		data[x + PIXELDIM * y + PIXELDIM2] = value; // g
-		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
-	}
-}
 
-void DrawLine(int x1, int y1, int x2, int y2, uchar * data)
+
+void SetLine(int x1, int y1, int x2, int y2, uchar * data)
 {
 	int dx = x2 - x1;
 	int dy = y2 - y1;
@@ -91,6 +77,7 @@ void DrawLine(int x1, int y1, int x2, int y2, uchar * data)
 }
 
 
+
 void KochGPU(uchar * data)
 {
 }
@@ -98,45 +85,95 @@ void KochGPU(uchar * data)
 
 void KochCPU(uchar * data)
 {
-	int x1 = PIXELDIM/2, y1 = 200, x2 = PIXELDIM/2, y2 = 200;
-	for (int j = 0; j < PIXELDIM; ++j)
-	{
-		for (int i = 0; i < PIXELDIM; ++i)
-		{
-			
-			KochRecursive(x1, y1, x2, y2, iterationBS);
-			int value = int(255 * (1 - iterationBS) / iterationBS);
-			KochSetData(i, j, value, data);
+	float x0 = 200.f;
+	float y0 = PIXELDIM / 2.0f;
 
-		}
+	float x1 = 250.f;
+	float y1 = PIXELDIM / 2.0f;
+
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+
+	//First Line
+	SetLine(x0, y0, x1, y1, data);
+	//SetLine(300.f, y0, 350.f, y1, data);
+	float direction = 60;
+	KochRecursive(x1, y1, dx,dy, direction, 5, data);
+    
+	//KochRecursive(0.0, 0.004, 5, data);
+	//KochRecursive(-120.0, 0.004, 5, data);
+	//KochRecursive(120.0, 0.004, 5, data);
 	
-	}
+	
 }
 
-void KochRecursive(int x1, int y1, int x2, int y2, int itr)
+#define r_xcos(x,y) x*0.86602540378f - y*0.5f
+#define r_ycos(x,y) y*0.86602540378f + x*0.5f
+#define nr_xcos(x,y) x*0.86602540378f + y*0.5f
+#define nr_ycos(x,y) y*0.86602540378f - x*0.5f
+
+void KochRecursive(float x1, float y1,float x2, float y2, int direction, int itr, uchar* data)
 {
-	float angle = 60 * PI / 180;
-	int x3 = (2 * x1 + x2) / 3;
-	int y3 = (2 * y1 + y2) / 3;
+	float length = std::sqrtf(x2*x2 + y2*y2);
+	if (length < 3.0f)
+		return;
+	float vecX_n = x2 / length;
+	float vecY_n = y2 / length;
 
-	int x4 = (x1 + 2 * x2) / 3;
-	int y4 = (y1 + 2 * y2) / 3;
+	float d1_x = r_xcos(vecX_n, vecY_n);
+	float d1_y = r_ycos(vecX_n, vecY_n);
 
-	int x = x3 + (x4 - x3)*cos(angle) + (y4 - y3)*sin(angle);
-	int y = y3 + (x4 - x3)*sin(angle) + (y4 - y3)*sin(angle);
+	float d2_x = nr_xcos(vecX_n, vecY_n);
+	float d2_y = nr_ycos(vecX_n, vecY_n);
 
+	//double dirRad = 0.0174533 * direction;
+//	float length = x2 - x1;
+	//float newX = x2 + length * cos(dirRad);
+	//float newY = y2 + length * sin(dirRad);
+
+	//draw the four parts of the side _/\_ 
+	//KochRecursive(direction, length, itr, data);
+	//direction += 60.0;
+	//KochRecursive(direction, length, itr, data);
+	//direction -= 120.0;
+	//KochRecursive(direction, length, itr, data);
+	//direction += 60.0;
+	//KochRecursive(direction, length, itr, data);
+		
+	
+	float dx = x2 - x1;
+	float dy = y2 - y1;
+	
+	//int x = x2 + (x2 - x1)*cos(direction) + (y2 - y1)*sin(direction);
+	//int y = y2 - (x2 - x1)*sin(direction) + (y2 - y1)*sin(direction);
+	
 	if (itr > 0)
 	{
-		KochRecursive(x1, y1, x3, y3, itr - 1);
-		KochRecursive(x3, y3, x, y, itr - 1);
-		KochRecursive(x, y, x4, y4, itr - 1);
-		KochRecursive(x4, y4, x2, y2, itr - 1);
+		itr--;
+		SetLine(x1, y1, x1+ d1_x * length, y1 + d1_y * length, data);
+		SetLine(x1 + d1_x * length, y1 + d1_y * length, 
+                x1 + d1_x * length + d2_x * length, 
+			    y1 + d1_y * length + d2_y * length, data);
+
+		float nextX = x1 + d1_x * length + d2_x * length;
+		float nextY = y1 + d1_y * length + d2_y * length;
+		SetLine(nextX, nextY, nextX+d1_x*length, nextY, data);
+		direction += 60;
+		float futureX = nextX + d1_x * length ;
+		float futureY = nextY + d1_y*length;
+		
+		//std::cout << "x:  " << newX << "  y2 : " << newY << std::endl;
+		//KochRecursive(nextX + d1_x*length, nextY, futureX,futureY, direction, itr, data);
+		//			y1 + d1_y * length + d2_y * length, x1+dx, y1+dy,direction, itr ,data);
+		
+		//KochRecursive(x3, y3, x, y, direction, itr ,data);
+		//SetLine(x3, y3, x, y, data);
+		//direction -= 120;
+		//KochRecursive(x, y, x4, y4, direction, itr ,data);
+		//SetLine(x, y, x4, y4, data);
+		//direction += 60;
+		//KochRecursive(x4, y4, x2, y2, direction, itr ,data);
+		//SetLine(x4, y4, x2, y2, data);
 	}
-	else
-	{
-		//line(x1, y1, x3, y3);
-		//line(x3, y3, x, y);
-		//line(x, y, x4, y4);
-		//line(x4, y4, x2, y2);
-	}
+	
 }
