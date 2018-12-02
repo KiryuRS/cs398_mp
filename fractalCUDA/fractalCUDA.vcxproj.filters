@@ -26,7 +26,7 @@
     <ClCompile Include="MandrelBrot.cpp">
       <Filter>Yong Kiat</Filter>
     </ClCompile>
-    <ClCompile Include="Koch.cpp">
+    <ClCompile Include="SierpinskiTriangle.cpp">
       <Filter>Yong Kiat</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,7 +42,7 @@
     <ClInclude Include="MandrelBrot.h">
       <Filter>Yong Kiat</Filter>
     </ClInclude>
-    <ClInclude Include="Koch.h">
+    <ClInclude Include="SierpinskiTriangle.h">
       <Filter>Yong Kiat</Filter>
     </ClInclude>
   </ItemGroup>
