@@ -3,7 +3,7 @@
 
 
 //N must be in 2 power x
-#define N 256
+#define N 1<<15
 
 
 
