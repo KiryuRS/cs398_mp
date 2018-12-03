@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 #elif defined CHENGJIANG_VERSION
 
 #elif defined KENNETH_VERSION
-
+	BrownianGPU(cpuOutput, &gpuOutput);
 #endif
 	sdkStopTimer(&hTimer);
 	dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);

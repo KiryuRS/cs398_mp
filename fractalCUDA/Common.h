@@ -34,8 +34,8 @@ typedef long long					llong;
 
 #define UINT_BITS					32
 #define PIXELDIM		            512
-static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
-static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
+static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM * sizeof(uchar);
+static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3 * sizeof(uchar);
 
 ///////////////////////////////////////////////////////////////////////////
 // CUDA Includes

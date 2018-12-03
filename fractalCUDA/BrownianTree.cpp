@@ -1,15 +1,15 @@
 #include "BrownianTree.h"
 
-void BrownianSetData(uint x, uint y, uchar value, uchar* data)
+void BrownianSetData(uint y, uint x, uchar value, uchar* data)
 {
-	data[x + PIXELDIM * y] = value;								// b
-	data[x + PIXELDIM * y + PIXELDIM2] = value;					// g
-	data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = value;		// r
+	data[y + PIXELDIM * x] = value;								// b
+	data[y + PIXELDIM * x + PIXELDIM2] = value;					// g
+	data[y + PIXELDIM * x + PIXELDIM2 + PIXELDIM2] = value;		// r
 }
 
 void BrownianCPU(uchar* data)
 {
-	uchar *input = new uchar[PIXELDIM * PIXELDIM]{ };
+	uchar *input = new uchar[PIXELDIM2]{ };
 	srand((unsigned)time(nullptr));
 	int px, py; // particle values
 	int dx, dy; // offsets
@@ -48,8 +48,36 @@ void BrownianCPU(uchar* data)
 		for (uint j = 0; j != PIXELDIM; ++j)
 		{
 			uchar rgb = input[i * PIXELDIM + j] ? 255 : 0;
-			BrownianSetData(i, j, rgb, data);
+			BrownianSetData(j, i, rgb, data);
 		}
 
 	delete[] input;
+}
+
+void BrownianGPU(uchar* cpuData, uchar** gpuData)
+{
+	uchar *dataIn = nullptr;
+	uchar *dataOut = nullptr;
+
+	// Create memory
+	checkCudaErrors(cudaMalloc((void**)&dataIn, PIXELDIM2));
+	checkCudaErrors(cudaMalloc((void**)&dataOut, PIXELDIM2));
+	*gpuData = new uchar[PIXELDIM2];
+
+	// Copy memory to
+	checkCudaErrors(cudaMemcpy(dataIn, cpuData, PIXELDIM2, cudaMemcpyHostToDevice));
+	checkCudaErrors(cudaMemcpy(dataOut, cpuData, PIXELDIM2, cudaMemcpyHostToDevice));
+
+	// Randomize the seed
+	srand((unsigned)time(nullptr));
+
+	// Call CUDA
+
+
+	// Copy memory over
+	checkCudaErrors(cudaMemcpy(*gpuData, dataOut, PIXELDIM2, cudaMemcpyDeviceToHost));
+
+	// Delete memory
+	cudaFree(dataIn);
+	cudaFree(dataOut);
 }
