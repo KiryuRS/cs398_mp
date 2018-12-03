@@ -74,9 +74,10 @@ int main(int argc, char **argv)
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
 	uchar				cpuOutput[PIXELDIM3]{ 0 };
-  uchar       *cpuOutputPtr;
+    uchar                *cpuOutputPtr;
 	uchar				*gpuOutput = nullptr;
-
+	uint byteCount =     PIXELDIM * PIXELDIM*3 * sizeof(unsigned char);
+	uchar *gpuOutput_image = (uchar *)malloc(sizeof(uchar) * byteCount);
 	// Printing the information
 	deviceProp.major = 0;
 	deviceProp.minor = 0;
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 	TriangleCPU(cpuOutputPtr);
 	//MandrelbrotCPU(cpuOutputPtr);
-	//RunKoch(cpuOutputPtr);
+	
 #elif defined ALVIN_VERSION
     HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
@@ -188,6 +189,20 @@ int main(int argc, char **argv)
 	std::string command;
 	command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
 	system(command.c_str());
+
+
+	delete[] cpuOutput;
+
+	// For deallocating memory for GPUOutput (GPU side)
+#ifdef YONGKIAT_VERSION
+
+#elif defined ALVIN_VERSION
+
+#elif defined CHENGJIANG_VERSION
+
+#elif defined KENNETH_VERSION
+
+#endif
 
 	return 0;
 }

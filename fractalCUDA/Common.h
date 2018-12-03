@@ -62,3 +62,4 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 #include "BurningShip.h"
 #include "MandrelBrot.h"
 #include "SierpinskiTriangle.h"
+
