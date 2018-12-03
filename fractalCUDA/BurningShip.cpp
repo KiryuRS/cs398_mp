@@ -30,8 +30,8 @@ void BurningShipGPU(uchar*)
 
 void BurningShipCPU(uchar* data)
 {
-	FractalTreeCPU(data);
-	/*
+	//FractalTreeCPU(data);
+	
 	int value = 0;
 	for (int j = 0; j < PIXELDIM; ++j) {
 		for (int i = 0; i < PIXELDIM; ++i) {
@@ -56,17 +56,19 @@ void BurningShipCPU(uchar* data)
 		//std::cout << std::endl;
 		//BitBlt(dc, j, 0, 1, rect.bottom, buffer_dc, j, 0, SRCCOPY);
 	}
-	*/
+	
 }
 
 
 
-void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data)
+void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data, uint counter)
 {
-	std::cout << x1 << " " << y1 << "              " << x2 << " " << y2 << std::endl;
+	//std::cout << x1 << " " << y1 << "              " << x2 << " " << y2 << std::endl;
 
 	int dx = x2 - x1;
 	int dy = y2 - y1;
+
+	counter *= 12;
 
 	if (std::abs(dy) > std::abs(dx))
 	{
@@ -82,8 +84,8 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data)
 				startX += deltaX;
 
 				data[static_cast<int>(startX) + PIXELDIM * y_i] = 0x00; // b
-				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2] = 0x00; // g
-				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2] =  counter; // g
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2 + PIXELDIM2] = 255 - counter; // r
 			}
 		}
 		else
@@ -92,8 +94,8 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data)
 			{
 				startX += deltaX;
 				data[static_cast<int>(startX) + PIXELDIM * y_i] = 0x00; // b
-				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2] = 0x00; // g
-				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2] = counter; // g
+				data[static_cast<int>(startX) + PIXELDIM * y_i + PIXELDIM2 + PIXELDIM2] = 255 - counter; // r
 			}
 		}
 
@@ -111,8 +113,8 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data)
 			{
 				startY += deltaY;
 				data[x_i + PIXELDIM * static_cast<int>(startY)] = 0x00; // b
-				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2] = 0x00; // g
-				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2] = counter; // g
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2 + PIXELDIM2] = 255 - counter; // r
 			}
 		}
 		else
@@ -121,8 +123,8 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data)
 			{
 				startY += deltaY;
 				data[x_i + PIXELDIM * static_cast<int>(startY)] = 0x00; // b
-				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2] = 0x00; // g
-				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2] = counter; // g
+				data[x_i + PIXELDIM * static_cast<int>(startY) + PIXELDIM2 + PIXELDIM2] = 255 - counter; // r
 			}
 		}
 	}
@@ -139,7 +141,7 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data)
 
 
 
-void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* data)
+void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* data, uint counter)
 {
 	float length = std::sqrtf(VecX*VecX + VecY*VecY);
 	if (std::sqrtf(VecX*VecX + VecY*VecY) < 3.0f)
@@ -158,14 +160,14 @@ void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* 
 
 	//std::cout << d1_x << " " << d1_y << " h " << d2_x << " " << d2_y << std::endl;
 
-	length *= 3.0f / 4.0f;
+	length *= 13.0f / 16.0f;
 
-	SetLineDraw(locX, locY, locX + d1_x * length,locY + d1_y * length, data);
-	SetLineDraw(locX, locY, locX + d2_x * length,locY + d2_y * length, data);
+	SetLineDraw(locX, locY, locX + d1_x * length,locY + d1_y * length, data, counter + 1);
+	SetLineDraw(locX, locY, locX + d2_x * length,locY + d2_y * length, data, counter + 1);
 
-	RecursionFractalTreeCPU(locX + d1_x * length, locY + d1_y * length, d1_x * length, d1_y * length, data);
-	RecursionFractalTreeCPU(locX + d2_x * length, locY + d2_y * length, d2_x * length, d2_y * length, data);
-
+	RecursionFractalTreeCPU(locX + d1_x * length, locY + d1_y * length, d1_x * length, d1_y * length, data, counter + 1);
+	RecursionFractalTreeCPU(locX + d2_x * length, locY + d2_y * length, d2_x * length, d2_y * length, data, counter + 1);
+	//std::cout << counter + 1 << std::endl;
 }
 
 
@@ -173,18 +175,20 @@ void FractalTreeCPU(uchar* data)
 {
 
 	float x0 = PIXELDIM / 2.0f;
-	float y0 = 200.f;
+	float y0 = 50.f;
 
 	float x1 = PIXELDIM / 2.0f;
-	float y1 = 250.f;
+	float y1 = 120.f;
 
 	float dx = x1 - x0;
 	float dy = y1 - y0;
 
-	SetLineDraw(x0, y0, x1, y1, data);
+	uint counter = 0;
+
+	SetLineDraw(x0, y0, x1, y1, data, counter);
 
 
-	RecursionFractalTreeCPU(x1, y1, dx, dy, data);
+	RecursionFractalTreeCPU(x1, y1, dx, dy, data, counter);
 }
 
 void FractalTreeGPU(uchar* data)
