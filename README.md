@@ -7,7 +7,7 @@ Implementation Roles
 --------------------
 WhyKay92:
 - ETF | Mandelbrot
-- IFS | Koch Snowflake [Good to have]
+- IFS | Sierpinski Triangle
 
 Kiryu:
 - Random Fractals | Self Avoiding Walks
