@@ -41,8 +41,8 @@ __global__ void heatDistrUpdate(uchar *in, uchar *out, uint width, uint height)
 void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut, uint width, uint height)
 {
 	// Setup the variables
-	dim3 UPBLOCK2{ BLOCK_SIZE, BLOCK_SIZE };
-	dim3 UPGRID2{ ((float)width + 1) / BLOCK_SIZE - 1, ((float)height + 1) / BLOCK_SIZE - 1 };
+	dim3 UPBLOCK2(BLOCK_SIZE, BLOCK_SIZE);
+	dim3 UPGRID2(ceil((float)width / BLOCK_SIZE), ceil((float)height / BLOCK_SIZE));
 	
 	// Iterations and calculation
 

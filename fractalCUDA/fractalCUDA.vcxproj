@@ -22,6 +22,9 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="henon.h" />
   </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="BrownianKernel.cu" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C144999E-B9AD-4C28-B718-541D736F1BDD}</ProjectGuid>
     <RootNamespace>simpleCuda</RootNamespace>

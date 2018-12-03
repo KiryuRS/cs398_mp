@@ -183,6 +183,7 @@ int main(int argc, char **argv)
 	system(command.c_str());
 
 	delete[] cpuOutput;
+	delete[] gpuOutput;
 
 	return 0;
 }

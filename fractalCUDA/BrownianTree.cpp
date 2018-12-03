@@ -61,23 +61,27 @@ void BrownianGPU(uchar* cpuData, uchar** gpuData)
 
 	// Create memory
 	checkCudaErrors(cudaMalloc((void**)&dataIn, PIXELDIM2));
-	checkCudaErrors(cudaMalloc((void**)&dataOut, PIXELDIM2));
-	*gpuData = new uchar[PIXELDIM2];
+	checkCudaErrors(cudaMalloc((void**)&dataOut, PIXELDIM3));
+	*gpuData = new uchar[PIXELDIM3];
 
 	// Copy memory to
-	checkCudaErrors(cudaMemcpy(dataIn, cpuData, PIXELDIM2, cudaMemcpyHostToDevice));
-	checkCudaErrors(cudaMemcpy(dataOut, cpuData, PIXELDIM2, cudaMemcpyHostToDevice));
+	//checkCudaErrors(cudaMemcpy(dataIn, cpuData, PIXELDIM2, cudaMemcpyHostToDevice));
+	checkCudaErrors(cudaMemcpy(dataOut, cpuData, PIXELDIM3, cudaMemcpyHostToDevice));
+	cudaDeviceSynchronize();
 
 	// Randomize the seed
 	srand((unsigned)time(nullptr));
 
 	// Call CUDA
-
+	BrownianGPUKernel(dataIn, dataOut, PIXELDIM, PIXELDIM);
+	cudaDeviceSynchronize();
 
 	// Copy memory over
-	checkCudaErrors(cudaMemcpy(*gpuData, dataOut, PIXELDIM2, cudaMemcpyDeviceToHost));
+	checkCudaErrors(cudaMemcpy(*gpuData, dataOut, PIXELDIM3, cudaMemcpyDeviceToHost));
 
 	// Delete memory
 	cudaFree(dataIn);
 	cudaFree(dataOut);
+
+	cudaDeviceReset();
 }

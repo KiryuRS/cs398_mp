@@ -34,4 +34,9 @@
       <Filter>Kenneth</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="BrownianKernel.cu">
+      <Filter>Kenneth</Filter>
+    </CudaCompile>
+  </ItemGroup>
 </Project>
