@@ -7,7 +7,20 @@
 #define shiftBS -PIXELDIM/1.6
 #define shiftBS2 -PIXELDIM/0.111
 
-void BurningShipCPU(uchar* data);
 
-void BurningShipGPU(uchar** data);
 
+struct BurningShip {
+	uchar * ptr1 = nullptr;
+	uchar * ptr2 = nullptr;
+	uchar * ptr3 = nullptr;
+
+
+
+	void BurningShipCPU(uchar* data);
+
+	void BurningShipGPU(uchar** data);
+
+	void clearGPUMemory(uchar** data);
+
+
+};

@@ -22,7 +22,7 @@ void BurningShipSetData(int x, int y, int value, uchar* data)
 
 
 
-void BurningShipCPU(uchar* data)
+void BurningShip::BurningShipCPU(uchar* data)
 {
 	//FractalTreeCPU(data);
 	

@@ -117,6 +117,9 @@ int main(int argc, char **argv)
 	const std::string fileOut{ "_ALVIN" };
 #elif defined CHENGJIANG_VERSION
 	const std::string fileOut{ "_CHENGJIANG" };
+
+	BurningShip ship;
+
 #elif defined KENNETH_VERSION
 	const std::string fileOut{ "_KENNETH" };
 #endif
@@ -134,7 +137,7 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
     HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
-	BurningShipCPU(cpuOutputPtr);
+	ship.BurningShipCPU(cpuOutputPtr);
 	//FractalTreeCPU(cpuOutputPtr);
 #elif defined KENNETH_VERSION
 
@@ -156,7 +159,7 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION
-	BurningShipGPU(&gpuOutput);
+	ship.BurningShipGPU(&gpuOutput);
 #elif defined KENNETH_VERSION
 
 #endif
@@ -201,7 +204,7 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION
-
+	ship.clearGPUMemory(&gpuOutput);
 #elif defined KENNETH_VERSION
 
 #endif

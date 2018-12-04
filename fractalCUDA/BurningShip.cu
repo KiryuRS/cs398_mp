@@ -30,9 +30,7 @@ __global__ void BurningShipDefaultCu(uchar *d_DataOut, uint limit)
 	for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) {
 		
 		 double c = a*a - b*b + x;
-			b = 2.0*fastAbsD(a*b);
-			b = b <= 0 ? -b : b;
-			b += y;
+			b = 2.0*fabs(a*b) + y;
 			a = c;
 			norm2 = a*a + b*b;
 		
@@ -64,23 +62,23 @@ __global__ void BurningShipDefaultCu(uchar *d_DataOut, uint limit)
 
 //-fmad=false command line to fix precision issue due to default optimize by compiler
 
-void BurningShipGPU(uchar** data)
+void BurningShip::BurningShipGPU(uchar** data)
 {
 #ifdef BurningshipDefault
+
 
 	dim3 DimBlock(shipBlock_size, shipBlock_size, 1);
 	dim3 DimGrid(ceil(((float)PIXELDIM) / shipBlock_size), ceil(((float)PIXELDIM) / shipBlock_size), 1);
 
 
-	uchar* cudaMem;
-	checkCudaErrors(cudaMalloc((void **)&cudaMem, PIXELDIM3 * sizeof(uchar)));
-	BurningShipDefaultCu << <DimGrid, DimBlock >> > (cudaMem, PIXELDIM);
+	checkCudaErrors(cudaMalloc((void **)&ptr1, PIXELDIM3 * sizeof(uchar)));
+	BurningShipDefaultCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
 	//
 	//
 	cudaDeviceSynchronize();
-	
+
 	*data = (uchar *)malloc(PIXELDIM3 * sizeof(uchar));
-	checkCudaErrors(cudaMemcpy(*data, cudaMem, PIXELDIM3 * sizeof(uchar), cudaMemcpyDeviceToHost));
+	checkCudaErrors(cudaMemcpy(*data, ptr1, PIXELDIM3 * sizeof(uchar), cudaMemcpyDeviceToHost));
 
 
 
@@ -91,4 +89,15 @@ void BurningShipGPU(uchar** data)
 
 
 
+}
+
+void BurningShip::clearGPUMemory(uchar** data)
+{
+#ifdef BurningshipDefault
+
+	cudaFree(ptr1);
+	free(*data);
+
+
+#endif
 }
