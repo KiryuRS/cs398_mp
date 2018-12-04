@@ -3,7 +3,16 @@
 
 #include "Common.h"
 
-void MandrelbrotCPU(uchar* data);
 
+struct Mandrelbrot
+{
+	uchar *ptr1 = nullptr;
+	uchar *ptr2 = nullptr;
+	uchar *ptr3 = nullptr;
+	
+	void MandrelbrotCPU(uchar* data);
 
- void MandrelbrotGPU(uchar* cpuOutput, uchar** gpuOutput);
+	void ClearMemory(uchar ** data);
+	void MandrelbrotGPU(uchar** gpuOutput);
+};
+

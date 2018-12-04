@@ -22,27 +22,14 @@ void MandrelBrotSetData(int x, int y, int value, uchar* data)
 	{
 		data[x + PIXELDIM * y] = value; // b
 		data[x + PIXELDIM * y + PIXELDIM2] = value; // g
-		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
+		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = value; // r
 	}
 }
 
-void MandrelbrotGPU(uchar* cpuOutput, uchar** gpuOutput)
-{
-	uchar* d_DataIn = nullptr;
-	uchar* d_DataOut = nullptr;
-
-	cudaMalloc((void **)&d_DataIn, PIXELDIM3);
-	cudaMalloc((void **)&d_DataOut, PIXELDIM3);
-	cudaMemcpy(d_DataIn, cpuOutput, PIXELDIM3, cudaMemcpyHostToDevice);
-
-	//Calls kernel function for mandrelbrot
-
-	cudaMemcpy(*gpuOutput, d_DataOut, PIXELDIM3, cudaMemcpyDeviceToHost);
-}
 
 
 
-void MandrelbrotCPU(uchar* data)
+void Mandrelbrot::MandrelbrotCPU(uchar* data)
 {
 	int value = 0;
 	for (int j = 0; j < PIXELDIM; ++j) 

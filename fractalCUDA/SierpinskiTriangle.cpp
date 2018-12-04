@@ -4,11 +4,11 @@
 
 //N must be in 2 power x 
 #define N (1<<9)
-static constexpr size_t  N2 = (N*N);
-__forceinline size_t Map(const double& x, const double& min, const double& max)
-{
-	return static_cast<size_t>(PIXELDIM * (x - min) / (max - min));
-}
+//static constexpr size_t  N2 = (N*N);
+//__forceinline size_t Map(const double& x, const double& min, const double& max)
+//{
+//	return static_cast<size_t>(PIXELDIM * (x - min) / (max - min));
+//}
 void SetData( int x, int y,int value, uchar* data)
 {
 	
@@ -30,8 +30,7 @@ void SetData( int x, int y,int value, uchar* data)
 }
 
 
-using namespace std;
-void TriangleCPU(uchar* data)
+void STriangle::TriangleCPU(uchar* data)
 {
 	
 	for (int y = N - 1; y >= 0; y--)
@@ -74,9 +73,5 @@ void TriangleCPU(uchar* data)
 	
 }
 
-void TriangleGPU(uchar* CPUin, uchar* GPUout)
-{
-
-}
 
 

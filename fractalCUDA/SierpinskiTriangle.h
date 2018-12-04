@@ -2,11 +2,18 @@
 
 #include "Common.h"
 
+struct STriangle
+{
 
-void TriangleCPU(uchar* data);
+	uchar * ptr1 = nullptr;
+	uchar * ptr2 = nullptr;
+	uchar * ptr3 = nullptr;
 
-
-void TriangleGPU(uchar* CPUin,uchar* data);
-
-
-void SetData(int x, int y, int value, uchar* data);
+	void TriangleCPU(uchar* data);
+	
+	
+	void TriangleGPU(uchar** data);
+	
+	void ClearMemory(uchar ** data);
+	
+};
