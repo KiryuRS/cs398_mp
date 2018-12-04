@@ -124,5 +124,4 @@ bmp_write(char *filename, bmp_header * header, unsigned char *data)
     }
     ofs.write(buffer, pixelarraysize + sizeof(bmp_header));
     ofs.close();
-    // delete[]data;
 };

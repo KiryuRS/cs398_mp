@@ -12,6 +12,7 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
+#include <memory>
 #include "bmp.h"
 
 typedef unsigned int				uint;
@@ -64,3 +65,6 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 #include "SierpinskiTriangle.h"
 #include "FractalTree.h"
 
+///////////////////////////////////////////////////////////////////////////
+// User Data Types
+///////////////////////////////////////////////////////////////////////////

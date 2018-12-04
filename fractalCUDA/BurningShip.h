@@ -11,8 +11,6 @@
 
 struct BurningShip {
 	uchar * ptr1 = nullptr;
-	uchar * ptr2 = nullptr;
-	uchar * ptr3 = nullptr;
 
 
 
