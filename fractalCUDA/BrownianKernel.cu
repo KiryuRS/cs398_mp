@@ -33,9 +33,9 @@ __global__ void heatDistrUpdate(uchar *in, uchar *out, uint width, uint height)
 	uchar rgb = in[y * width + x] ? 255 : 0;
 
 	// All three colors
-	out[y * width + x] = rgb;				// B
-	out[y * width + x + PIXELDIM2] = rgb;	// G
-	out[y * width + x + PIXELDIM3] = rgb;	// R
+	out[y * width + x] = rgb;							// B
+	out[y * width + x + PIXELDIM2] = rgb;				// G
+	out[y * width + x + PIXELDIM2 + PIXELDIM2] = rgb;	// R
 }
 
 void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut, uint width, uint height)
@@ -44,6 +44,9 @@ void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut, uint width, uint heigh
 	dim3 UPBLOCK2(BLOCK_SIZE, BLOCK_SIZE);
 	dim3 UPGRID2(ceil((float)width / BLOCK_SIZE), ceil((float)height / BLOCK_SIZE));
 	
+	// Set the seed
+	d_DataIn[(rand() % PIXELDIM) * PIXELDIM + rand() % PIXELDIM] = 1;
+
 	// Iterations and calculation
 
 	// Update

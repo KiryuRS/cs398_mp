@@ -1,6 +1,6 @@
 #include "BrownianTree.h"
 
-void BrownianSetData(uint y, uint x, uchar value, uchar* data)
+void BrownianSetData(uint x, uint y, uchar value, uchar* data)
 {
 	data[y + PIXELDIM * x] = value;								// b
 	data[y + PIXELDIM * x + PIXELDIM2] = value;					// g
@@ -10,6 +10,7 @@ void BrownianSetData(uint y, uint x, uchar value, uchar* data)
 void BrownianCPU(uchar* data)
 {
 	uchar *input = new uchar[PIXELDIM2]{ };
+
 	srand((unsigned)time(nullptr));
 	int px, py; // particle values
 	int dx, dy; // offsets
@@ -17,7 +18,7 @@ void BrownianCPU(uchar* data)
 	// set the seed
 	input[(rand() % PIXELDIM) * PIXELDIM + rand() % PIXELDIM] = 1;
 
-	for (int i = 0; i != 100000; ++i) {
+	for (int i = 0; i != BROWNIAN_ITERATIONS; ++i) {
 		// set particle's initial position
 		px = rand() % PIXELDIM;
 		py = rand() % PIXELDIM;

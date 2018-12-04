@@ -73,7 +73,8 @@ int main(int argc, char **argv)
 	StopWatchInterface	*hTimer = nullptr;
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
-	uchar				*cpuOutput = nullptr;
+	uchar				cpuOutput[PIXELDIM3]{ 0 };
+	uchar               *cpuOutputPtr = nullptr;
 	uchar				*gpuOutput = nullptr;
 
 	// Printing the information
@@ -101,9 +102,10 @@ int main(int argc, char **argv)
     //header.colors = 0;
     //header.important_colors = 0;
 
-    bmp_read("blank_bmp.bmp", &header, &cpuOutput);
+    bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
+	MyCopy(cpuOutputPtr, cpuOutputPtr + PIXELDIM3, cpuOutput);
 
 	sdkCreateTimer(&hTimer);
 
@@ -127,11 +129,11 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 
 #elif defined ALVIN_VERSION
-    HenonCPU(cpuOutput);
+    HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
 
 #elif defined KENNETH_VERSION
-	BrownianCPU(cpuOutput);
+	BrownianCPU(cpuOutputPtr);
 #endif
 	sdkStopTimer(&hTimer);
 	double dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
@@ -166,7 +168,7 @@ int main(int argc, char **argv)
 	// Copying the contents over to our output file
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
-	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutput);
+	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
 
 	std::string gpuOutputFile{ "gpuOutput" };
 	gpuOutputFile += fileOut + ".bmp";
@@ -182,7 +184,7 @@ int main(int argc, char **argv)
 	command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
 	system(command.c_str());
 
-	delete[] cpuOutput;
+	delete[] cpuOutputPtr;
 	delete[] gpuOutput;
 
 	return 0;
