@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	StopWatchInterface	*hTimer = nullptr;
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
-	RTTW<>				cpuOutput;
+	uchar				cpuOutput[PIXELDIM3]{ };
     uchar               *cpuOutputPtr;
 	uchar				*gpuOutput = nullptr;
 
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 
     bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
 	size_t size = header.width * header.height;
-	cpuOutput = RTTW<>{ cpuOutputPtr, size };
+	MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
 
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 	// Copying the contents over to our output file
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
-	RTTW<char> out{ PIXELDIM3 };
+	char* out = new char[PIXELDIM3]{ };
 	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
 
 	std::string gpuOutputFile{ "gpuOutput" };
@@ -187,9 +187,10 @@ int main(int argc, char **argv)
 		std::cerr << "..Please allocate memory for gpuOutput!\nUnable to output file into a bmp file!" << std::endl;
 		return -1;
 	}
-	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out.get());
-	bmp_write(out.get(), &header, gpuOutput);
+	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
+	bmp_write(out, &header, gpuOutput);
 	delete[] cpuOutputPtr;
+	delete[] out;
 #pragma endregion
 
 	std::string command;
