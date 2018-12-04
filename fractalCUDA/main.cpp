@@ -1,7 +1,7 @@
 // @TODO: Uncomment the codes below to run the relevant test case
-#define YONGKIAT_VERSION
+//#define YONGKIAT_VERSION
 //#define ALVIN_VERSION
-//#define CHENGJIANG_VERSION
+#define CHENGJIANG_VERSION
 //#define KENNETH_VERSION
 
 #include "Common.h"
@@ -87,6 +87,7 @@ int main(int argc, char **argv)
 		   deviceProp.name, deviceProp.multiProcessorCount, deviceProp.major, deviceProp.minor);
 	PrintInformation(deviceProp);
 
+	cudaDeviceSynchronize();
     // Setup bmp_header
     //header.id1 = 'B';
     //header.id2 = 'M';
@@ -134,6 +135,7 @@ int main(int argc, char **argv)
     HenonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
 	BurningShipCPU(cpuOutputPtr);
+	//FractalTreeCPU(cpuOutputPtr);
 #elif defined KENNETH_VERSION
 
 #endif
@@ -154,7 +156,7 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION
-	BurningShipGPU(gpuOutput);
+	BurningShipGPU(&gpuOutput);
 #elif defined KENNETH_VERSION
 
 #endif

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="bmp.cpp" />
     <ClCompile Include="BurningShip.cpp" />
+    <ClCompile Include="FractalTree.cpp" />
     <ClCompile Include="henon.cpp" />
     <ClCompile Include="SierpinskiTriangle.cpp" />
     <ClCompile Include="main.cpp" />
@@ -22,9 +23,14 @@
     <ClInclude Include="bmp.h" />
     <ClInclude Include="BurningShip.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="FractalTree.h" />
     <ClInclude Include="henon.h" />
     <ClInclude Include="SierpinskiTriangle.h" />
     <ClInclude Include="MandrelBrot.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="BurningShip.cu" />
+    <CudaCompile Include="FractalTree.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C144999E-B9AD-4C28-B718-541D736F1BDD}</ProjectGuid>
@@ -105,6 +111,7 @@
       <Include>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v9.2\common\inc;</Include>
       <AdditionalCompilerOptions>
       </AdditionalCompilerOptions>
+      <AdditionalOptions>-fmad=false %(AdditionalOptions)</AdditionalOptions>
     </CudaCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

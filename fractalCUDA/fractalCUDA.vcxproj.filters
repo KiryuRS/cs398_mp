@@ -29,6 +29,9 @@
     <ClCompile Include="SierpinskiTriangle.cpp">
       <Filter>Yong Kiat</Filter>
     </ClCompile>
+    <ClCompile Include="FractalTree.cpp">
+      <Filter>Cheng Jiang</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -45,5 +48,16 @@
     <ClInclude Include="SierpinskiTriangle.h">
       <Filter>Yong Kiat</Filter>
     </ClInclude>
+    <ClInclude Include="FractalTree.h">
+      <Filter>Cheng Jiang</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="FractalTree.cu">
+      <Filter>Cheng Jiang</Filter>
+    </CudaCompile>
+    <CudaCompile Include="BurningShip.cu">
+      <Filter>Cheng Jiang</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>
