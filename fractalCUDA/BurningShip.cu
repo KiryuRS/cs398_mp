@@ -80,10 +80,6 @@ void BurningShip::BurningShipGPU(uchar** data)
 	*data = (uchar *)malloc(PIXELDIM3 * sizeof(uchar));
 	checkCudaErrors(cudaMemcpy(*data, ptr1, PIXELDIM3 * sizeof(uchar), cudaMemcpyDeviceToHost));
 
-
-
-
-
 #endif
 
 

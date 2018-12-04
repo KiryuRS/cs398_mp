@@ -37,9 +37,7 @@ void BurningShip::BurningShipCPU(uchar* data)
 			//std::cout << " start " << x << " " << y << std::endl;
 			for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) {
 				double c = a*a - b*b + x;
-				b = 2.0*a*b;
-				b = b <= 0 ? -b : b;
-				b += y;
+				b = 2.0*std::fabs(a*b) + y;
 				a = c;
 				norm2 = a*a + b*b;
 				//std::cout << a << " " << b << std::endl;
