@@ -1,6 +1,6 @@
 #include "SierpinskiTriangle.h"
 #include <iostream>
-
+//Push to own branch
 
 //N must be in 2 power x 
 #define N (1<<9)
@@ -15,17 +15,12 @@ void SetData( int x, int y,int value, uchar* data)
 
 	if (value == 0)
 	{
-		data[x + PIXELDIM * y] = value; // b
-		data[x + PIXELDIM * y + PIXELDIM2] = value; // g
-		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = value; // r
+		data[x + PIXELDIM * y] = 0xef; // b
+		data[x + PIXELDIM * y + PIXELDIM2] = 0xcd; // g
+		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xab; // r
 	}
 	
-	else
-	{
-		data[x + PIXELDIM * y] = value; // b
-		data[x + PIXELDIM * y + PIXELDIM2] = value; // g
-		data[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = value; // r
-	}
+
 
 }
 

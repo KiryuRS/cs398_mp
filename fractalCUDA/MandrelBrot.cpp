@@ -9,6 +9,7 @@
 #define magBS 2.5
 #define shiftBS -PIXELDIM/2.0
 #define shiftBS2 -PIXELDIM/1.5
+//Push to own branch
 
 void MandrelBrotSetData(int x, int y, int value, uchar* data)
 {
