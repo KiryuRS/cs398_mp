@@ -73,11 +73,11 @@ int main(int argc, char **argv)
 	StopWatchInterface	*hTimer = nullptr;
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
-	uchar				cpuOutput[PIXELDIM3]{ 0 };
-    uchar                *cpuOutputPtr;
+	RTTW<>				cpuOutput;
+    uchar               *cpuOutputPtr;
 	uchar				*gpuOutput = nullptr;
-	uint byteCount =     PIXELDIM * PIXELDIM*3 * sizeof(unsigned char);
-	uchar *gpuOutput_image = (uchar *)malloc(sizeof(uchar) * byteCount);
+
+
 	// Printing the information
 	deviceProp.major = 0;
 	deviceProp.minor = 0;
@@ -105,6 +105,8 @@ int main(int argc, char **argv)
     //header.important_colors = 0;
 
     bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
+	size_t size = header.width * header.height;
+	cpuOutput = RTTW<>{ cpuOutputPtr, size };
     header.h_resolution = 8192;
     header.v_resolution = 8192;
 
@@ -175,8 +177,7 @@ int main(int argc, char **argv)
 	// Copying the contents over to our output file
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
-	char* out = new char[PIXELDIM3]{};
-	//MyCopy(std::begin(cpuOutput), std::end(cpuOutput), out);
+	RTTW<char> out{ PIXELDIM3 };
 	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
 
 	std::string gpuOutputFile{ "gpuOutput" };
@@ -186,17 +187,14 @@ int main(int argc, char **argv)
 		std::cerr << "..Please allocate memory for gpuOutput!\nUnable to output file into a bmp file!" << std::endl;
 		return -1;
 	}
-	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
-	bmp_write(out, &header, gpuOutput);
-	delete[] out;
+	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out.get());
+	bmp_write(out.get(), &header, gpuOutput);
+	delete[] cpuOutputPtr;
 #pragma endregion
 
 	std::string command;
 	command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
 	system(command.c_str());
-
-
-	delete[] cpuOutput;
 
 	// For deallocating memory for GPUOutput (GPU side)
 #ifdef YONGKIAT_VERSION

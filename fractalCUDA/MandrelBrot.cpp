@@ -70,12 +70,12 @@ void MandrelbrotCPU(uchar* data)
 	}
 }
 
-__device__ int Mandrelbrot(int x, int y, int maxIter)
-{
-
-}
-
-__global__ void MandrelbrotKernel(uchar* cpu, uchar* gpu)
-{
-
-}
+//__device__ int Mandrelbrot(int x, int y, int maxIter)
+//{
+//
+//}
+//
+//__global__ void MandrelbrotKernel(uchar* cpu, uchar* gpu)
+//{
+//
+//}
