@@ -75,7 +75,7 @@ __global__ void heatDistrCalculation(uchar *data, curandState *state, int py, in
 	while (true)
 	{
 		if (mutex)
-			return;
+			break;
 
 		randomDirection(state, &dx);
 		randomDirection(state, &dy);
@@ -107,19 +107,18 @@ __global__ void heatDistrUpdate(uchar *in, uchar *out)
 	uint x = blockDim.x * blockIdx.x + tx;
 	uint y = blockDim.y * blockIdx.y + ty;
 
+	if (x >= PIXELDIM || y >= PIXELDIM)
+		return;
+
 	// Copy into our shared memory
-	if (x < PIXELDIM && y < PIXELDIM)
-		shm[ty][tx] = in[y * PIXELDIM + x] ? 255 : 0;
+	shm[ty][tx] = in[y * PIXELDIM + x] ? 255 : 0;
 	__syncthreads();
 
 	// All three colors
-	if (x < PIXELDIM && y < PIXELDIM)
-	{
-		uint rgb = shm[ty][tx];
-		out[y * PIXELDIM + x] = rgb;							// B
-		out[y * PIXELDIM + x + PIXELDIM2] = rgb;				// G
-		out[y * PIXELDIM + x + PIXELDIM2 + PIXELDIM2] = rgb;	// R
-	}
+	uint rgb = shm[ty][tx];
+	out[y * PIXELDIM + x] = rgb;							// B
+	out[y * PIXELDIM + x + PIXELDIM2] = rgb;				// G
+	out[y * PIXELDIM + x + PIXELDIM2 + PIXELDIM2] = rgb;	// R
 }
 
 void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut)
