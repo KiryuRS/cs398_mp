@@ -1,8 +1,8 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_VERSION
-#define ALVIN_VERSION
+//#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION
-//#define KENNETH_VERSION
+#define KENNETH_VERSION
 
 #include "Common.h"
 
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 	ship.BurningShipCPU(cpuOutputPtr);
 	//FractalTreeCPU(cpuOutputPtr);
 #elif defined KENNETH_VERSION
-
+	BrownianCPU(cpuOutputPtr);
 #endif
 	sdkStopTimer(&hTimer);
 	double dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 #elif defined CHENGJIANG_VERSION
 	ship.BurningShipGPU(&gpuOutput);
 #elif defined KENNETH_VERSION
-
+	BrownianGPU(cpuOutput, &gpuOutput);
 #endif
 	sdkStopTimer(&hTimer);
 	dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);

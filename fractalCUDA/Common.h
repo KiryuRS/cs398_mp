@@ -64,11 +64,12 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 // Fractals Includes
 ///////////////////////////////////////////////////////////////////////////
 #include "henon.h"
-#include "Newton.h"
-#include "BurningShip.h"
-#include "MandrelBrot.h"
-#include "SierpinskiTriangle.h"
-#include "FractalTree.h"
+#include "BrownianTree.h"
+//#include "Newton.h"
+//#include "BurningShip.h"
+//#include "MandrelBrot.h"
+//#include "SierpinskiTriangle.h"
+//#include "FractalTree.h"
 
 ///////////////////////////////////////////////////////////////////////////
 // User Data Types

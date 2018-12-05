@@ -66,7 +66,6 @@ void BrownianGPU(uchar* cpuData, uchar** gpuData)
 	*gpuData = new uchar[PIXELDIM3];
 
 	// Copy memory to
-	//checkCudaErrors(cudaMemcpy(dataIn, cpuData, PIXELDIM2, cudaMemcpyHostToDevice));
 	checkCudaErrors(cudaMemcpy(dataOut, cpuData, PIXELDIM3, cudaMemcpyHostToDevice));
 	cudaDeviceSynchronize();
 
@@ -74,7 +73,7 @@ void BrownianGPU(uchar* cpuData, uchar** gpuData)
 	srand((unsigned)time(nullptr));
 
 	// Call CUDA
-	BrownianGPUKernel(dataIn, dataOut, PIXELDIM, PIXELDIM);
+	BrownianGPUKernel(dataIn, dataOut);
 	cudaDeviceSynchronize();
 
 	// Copy memory over

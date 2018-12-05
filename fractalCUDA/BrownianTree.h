@@ -1,8 +1,8 @@
 #pragma once
 #include "Common.h"
 
-#define BROWNIAN_ITERATIONS		100000
+#define BROWNIAN_ITERATIONS		10
 
 void BrownianCPU(uchar *data);
 void BrownianGPU(uchar* cpuData, uchar** gpuData);
-void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut, uint width, uint height);
+void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut);

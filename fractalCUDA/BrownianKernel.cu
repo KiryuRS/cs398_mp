@@ -1,54 +1,155 @@
 
-#include <cuda.h>
-#include <cuda_runtime.h>
-#include <device_launch_parameters.h>
-#include <helper_cuda.h>
-#include <helper_functions.h>
+#include "Common.h"
+#include <curand.h>
+#include <curand_kernel.h>
 
-typedef unsigned char uchar;
-typedef unsigned int uint;
-#define UINT_BITS					32
-#define BLOCK_SIZE					32
-#define PIXELDIM		            512
-static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
-static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
-
-__global__ void heatDistrCalculation()
+struct Lock
 {
+	int *mutex;
+
+	Lock()
+		: mutex{ nullptr }
+	{
+		int state = 0;
+		cudaMalloc((void**)&mutex, sizeof(int));
+		cudaMemcpy(mutex, &state, sizeof(int), cudaMemcpyHostToDevice);
+	}
+
+	~Lock()
+	{
+		cudaFree(mutex);
+	}
+
+	__device__ void lock()
+	{
+		while (atomicCAS(mutex, 0, 1) != 0);
+	}
+
+	__device__ void unlock()
+	{
+		atomicExch(mutex, 0);
+	}
+};
+
+__device__ int mutex = 0;
+
+__global__ void resetMutex(void)
+{
+	mutex = 0;
+}
+
+__global__ void setup_kernel(uchar *data, curandState *state, uint seed)
+{
+	curand_init(seed, 1, 0, state);
+	float _rand = curand_uniform(state) * PIXELDIM;
+	uint randy = (uint)truncf(_rand);
+	_rand = curand_uniform(state) * PIXELDIM;
+	uint randx = (uint)truncf(_rand);
+
+	// Randomly plant a seed
+	data[randy * PIXELDIM + randx] = 1;
+}
+
+template <typename T>
+__device__ void randomDirection(curandState *state, T* value)
+{
+	float _rand = curand_uniform(state) * PIXELDIM;
+	*value = (T)truncf(_rand);
+	*value = *value % 3 - 1;
+}
+
+template <typename T>
+__device__ void randomPosition(curandState *state, T* py, T* px)
+{
+	float _rand = curand_uniform(state) * PIXELDIM;
+	*py = (int)truncf(_rand);
+	_rand = curand_uniform(state) * PIXELDIM;
+	*px = (int)truncf(_rand);
+}
+
+__global__ void heatDistrCalculation(uchar *data, curandState *state, int py, int px)
+{
+	int dx, dy;
+
+	// Every thread to perform the same operation and determine who add it first
+	while (true)
+	{
+		if (mutex)
+			return;
+
+		randomDirection(state, &dx);
+		randomDirection(state, &dy);
+
+		if (dx + px < 0 || dx + px >= PIXELDIM || dy + py < 0 || dy + py >= PIXELDIM)
+			randomPosition(state, &py, &px);
+		else if (data[(py + dy) * PIXELDIM + px + dx] != 0)
+		{
+			// Bumped into something
+			mutex = 1;
+			data[py * PIXELDIM + px] = 1;
+			break;
+		}
+		else
+		{
+			py += dy;
+			px += dx;
+		}
+	}
 	
 }
 
-__global__ void heatDistrUpdate(uchar *in, uchar *out, uint width, uint height)
+__global__ void heatDistrUpdate(uchar *in, uchar *out)
 {
+	__shared__ uchar shm[BLOCK_SIZE][BLOCK_SIZE];
+
 	uint tx = threadIdx.x;
 	uint ty = threadIdx.y;
 	uint x = blockDim.x * blockIdx.x + tx;
 	uint y = blockDim.y * blockIdx.y + ty;
 
-	// Check if its out of bounds
-	if (x >= width || y >= height)
-		return;
-
-	// Copy into the data
-	uchar rgb = in[y * width + x] ? 255 : 0;
+	// Copy into our shared memory
+	if (x < PIXELDIM && y < PIXELDIM)
+		shm[ty][tx] = in[y * PIXELDIM + x] ? 255 : 0;
+	__syncthreads();
 
 	// All three colors
-	out[y * width + x] = rgb;							// B
-	out[y * width + x + PIXELDIM2] = rgb;				// G
-	out[y * width + x + PIXELDIM2 + PIXELDIM2] = rgb;	// R
+	if (x < PIXELDIM && y < PIXELDIM)
+	{
+		uint rgb = shm[ty][tx];
+		out[y * PIXELDIM + x] = rgb;							// B
+		out[y * PIXELDIM + x + PIXELDIM2] = rgb;				// G
+		out[y * PIXELDIM + x + PIXELDIM2 + PIXELDIM2] = rgb;	// R
+	}
 }
 
-void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut, uint width, uint height)
+void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut)
 {
 	// Setup the variables
-	dim3 UPBLOCK2(BLOCK_SIZE, BLOCK_SIZE);
-	dim3 UPGRID2(ceil((float)width / BLOCK_SIZE), ceil((float)height / BLOCK_SIZE));
+	dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+	dim3 dimGrid(ceil((float)PIXELDIM / BLOCK_SIZE), ceil((float)PIXELDIM / BLOCK_SIZE));
 	
-	// Set the seed
-	d_DataIn[(rand() % PIXELDIM) * PIXELDIM + rand() % PIXELDIM] = 1;
+	// Initialize
+	srand((uint)time(nullptr));
+	curandState *state = nullptr;
+	cudaMalloc(&state, sizeof(curandState));
+	setup_kernel<<<1,1>>>(d_DataIn, state, (uint)time(nullptr));
 
+	int py, px;
 	// Iterations and calculation
+	for (uint i = 0; i != BROWNIAN_ITERATIONS; ++i)
+	{
+		resetMutex<<<1,1>>>();
+		cudaDeviceSynchronize();
+
+		// Set particle's initial position
+		py = rand() % PIXELDIM;
+		px = rand() % PIXELDIM;
+
+		// Finding the position
+		heatDistrCalculation<<<dimGrid, dimBlock>>>(d_DataIn, state, py, px);
+	}
+	cudaFree(state);
 
 	// Update
-	heatDistrUpdate<<<UPGRID2, UPBLOCK2>>>(d_DataIn, d_DataOut, width, height);
+	heatDistrUpdate<<<dimGrid, dimBlock>>>(d_DataIn, d_DataOut);
 }
