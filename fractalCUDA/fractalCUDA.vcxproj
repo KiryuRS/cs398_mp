@@ -14,7 +14,7 @@
     <ClCompile Include="bmp.cpp" />
     <ClCompile Include="BurningShip.cpp" />
     <ClCompile Include="FractalTree.cpp" />
-    <ClCompile Include="henon.cpp" />
+    <ClCompile Include="Henon.cpp" />
     <ClCompile Include="Newton.cpp" />
     <ClCompile Include="SierpinskiTriangle.cpp" />
     <ClCompile Include="main.cpp" />
@@ -25,7 +25,7 @@
     <ClInclude Include="BurningShip.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="FractalTree.h" />
-    <ClInclude Include="henon.h" />
+    <ClInclude Include="Henon.h" />
     <ClInclude Include="Newton.h" />
     <ClInclude Include="SierpinskiTriangle.h" />
     <ClInclude Include="MandrelBrot.h" />
@@ -33,6 +33,7 @@
   <ItemGroup>
     <CudaCompile Include="BurningShip.cu" />
     <CudaCompile Include="FractalTree.cu" />
+    <CudaCompile Include="Newton.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C144999E-B9AD-4C28-B718-541D736F1BDD}</ProjectGuid>
