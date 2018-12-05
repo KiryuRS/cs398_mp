@@ -11,15 +11,16 @@ WhyKay92:
 
 Kiryu:
 - Random Fractals | Self Avoiding Walks
-- Random Fractals | Brownian Tree
+- Random Fractals | Brownian Tree           [In-Progress]
 
 CJ:
-- ETF | Burning Ship Fractal
-- L-System | Fractal Tree
+- ETF | Burning Ship Fractal                [Completed]
+- L-System | Fractal Tree                   [Completed]
 
 Koori:
-- Strange Attractors | Classical Hénon map
-- FSR | Sierpinski carpet / Cantor set
+- Strange Attractors | Classical Hénon map  [Dropped]
+- ETF | Newton Fractals                     [Completed]
+- FSR | Sierpinski carpet / Cantor set      [In-Progress]
 
 
 
