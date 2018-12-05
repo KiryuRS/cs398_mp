@@ -1,5 +1,3 @@
-#include "Newton.h"
-
 #include "Common.h"
 
 #include <complex>
@@ -17,14 +15,15 @@ __forceinline size_t Map(const double& x, const double& min, const double& max)
   return static_cast<size_t>(PIXELDIM * (x - min) / (max - min));
 }
 
-__forceinline void SetData(const double& x, const double& y, uchar* data, int color)
+__forceinline void SetData(int x, int y, uchar* data, int color)
 {
   //static constexpr double xMIN = -2.5f;
   //static constexpr double xMAX =  1.0f;
   //static constexpr double yMIN = -1.0f;
   //static constexpr double yMAX =  1.0f;
   //size_t index = Map(y, yMIN, yMAX) * PIXELDIM + Map(x, xMIN, xMAX);
-  size_t index = static_cast<size_t>((int)y * PIXELDIM + (int)x);
+  //size_t index = static_cast<size_t>((int)y * PIXELDIM + (int)x);
+  size_t index = y * PIXELDIM + x;
   if (index < PIXELDIM2)
   {
     switch (color)
@@ -44,10 +43,6 @@ __forceinline void SetData(const double& x, const double& y, uchar* data, int co
       data[index + PIXELDIM2] = 0x00;
       data[index] = 0xff; // b
       break;
-    case 3:
-      data[index + PIXELDIM2 + PIXELDIM2] = 0x00;
-      data[index + PIXELDIM2] = 0x00;
-      data[index] = 0x00; // b
     }
   }
 }
@@ -90,10 +85,10 @@ void NewtonCPU(uchar * data)
 {
   for (auto y = 0; y < PIXELDIM; ++y)
   {
+    float zy = ceilf((float)y * 2.0f / (PIXELDIM) + -1.0f);
     for (auto x = 0; x < PIXELDIM; ++x)
     {
-      float zx = MapToMandrelbrot((float)x, -1.0f, 1.0f);
-      float zy = MapToMandrelbrot((float)y, -1.0f, 1.0f);
+      float zx = ceilf((float)x * 2.0f / (PIXELDIM) + -1.0f);
 
       // Mapped coordinates
       std::complex<float> z{ zx, zy };
@@ -106,11 +101,10 @@ void NewtonCPU(uchar * data)
         std::complex<float>{ -0.5f, -sqrtf(3.0f) / 2.0f},
       };
 
-                int iteration     = 0;
-      constexpr int maxIteration  = 100;
+      int iteration     = 0;
 
       bool done = false;
-      while (iteration < maxIteration)
+      while (iteration < MAX_ITERATIONS)
       {
         // Newton-Raphson
         z -= Fz(z) / dFz(z);

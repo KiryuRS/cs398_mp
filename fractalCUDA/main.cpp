@@ -69,23 +69,22 @@ void PrintInformation(cudaDeviceProp& deviceProp)
 
 int main(int argc, char **argv)
 {
-	// Declaring all the variables
-	StopWatchInterface	*hTimer = nullptr;
-	cudaDeviceProp		deviceProp;
-	bmp_header			header;
-	uchar				cpuOutput[PIXELDIM3]{ };
+    // Declaring all the variables
+    StopWatchInterface	*hTimer = nullptr;
+    cudaDeviceProp        deviceProp;
+    bmp_header			header;
     uchar               *cpuOutputPtr;
-	uchar				*gpuOutput = nullptr;
+    uchar               *gpuOutputPtr;
 
 
-	// Printing the information
-	deviceProp.major = 0;
-	deviceProp.minor = 0;
-	int dev = findCudaDevice(argc, (const char**)argv);
-	checkCudaErrors(cudaGetDeviceProperties(&deviceProp, dev));
-	printf("CUDA device [%s] has %d Multi-Processors, Compute %d.%d\n",
-		   deviceProp.name, deviceProp.multiProcessorCount, deviceProp.major, deviceProp.minor);
-	PrintInformation(deviceProp);
+    // Printing the information
+    deviceProp.major = 0;
+    deviceProp.minor = 0;
+    int dev = findCudaDevice(argc, (const char**)argv);
+    checkCudaErrors(cudaGetDeviceProperties(&deviceProp, dev));
+    printf("CUDA device [%s] has %d Multi-Processors, Compute %d.%d\n",
+    deviceProp.name, deviceProp.multiProcessorCount, deviceProp.major, deviceProp.minor);
+    PrintInformation(deviceProp);
 
 	cudaDeviceSynchronize();
     // Setup bmp_header
@@ -104,9 +103,10 @@ int main(int argc, char **argv)
     //header.colors = 0;
     //header.important_colors = 0;
 
+    bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
     bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
-	size_t size = header.width * header.height;
-	MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
+    size_t size = header.width * header.height;
+    //MyCopy(cpuOutputPtr, cpuOutputPtr + PIXELDIM3, cpuOutput);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
 
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 	//MandrelbrotGPU(gpuOutput);
 #elif defined ALVIN_VERSION
-
+  NewtonGPU(gpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
 	ship.BurningShipGPU(&gpuOutput);
 #elif defined KENNETH_VERSION
@@ -183,14 +183,15 @@ int main(int argc, char **argv)
 
 	std::string gpuOutputFile{ "gpuOutput" };
 	gpuOutputFile += fileOut + ".bmp";
-	if (!gpuOutput)
+	if (!gpuOutputPtr)
 	{
 		std::cerr << "..Please allocate memory for gpuOutput!\nUnable to output file into a bmp file!" << std::endl;
 		return -1;
 	}
 	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
-	bmp_write(out, &header, gpuOutput);
+	bmp_write(out, &header, gpuOutputPtr);
 	delete[] cpuOutputPtr;
+  delete[] gpuOutputPtr;
 	delete[] out;
 #pragma endregion
 
@@ -202,7 +203,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 
 #elif defined ALVIN_VERSION
-
+  
 #elif defined CHENGJIANG_VERSION
 	ship.clearGPUMemory(&gpuOutput);
 #elif defined KENNETH_VERSION
