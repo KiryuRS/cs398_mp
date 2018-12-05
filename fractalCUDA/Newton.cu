@@ -65,8 +65,8 @@ __global__ void NewtonGPUCalc(uchar *d_DataOut)
   if (tx >= PIXELDIM || ty >= PIXELDIM)
     return;
 
-  float zx = ceilf((float)tx * 2.0f / (PIXELDIM) + -1.0f);
-  float zy = ceilf((float)ty * 2.0f / (PIXELDIM) + -1.0f);
+  float zx = (float)tx * 2.0f / (PIXELDIM - 1) + -1.0f;
+  float zy = (float)ty * 2.0f / (PIXELDIM - 1) + -1.0f;
 
   //// Mapped coordinates
   //thrust::complex<float> z{ zx, zy };
@@ -90,11 +90,9 @@ __global__ void NewtonGPUCalc(uchar *d_DataOut)
     cuFloatComplex{ -0.5f, -sqrtf(3.0f) / 2.0f }
   };
 
-  int iteration     = 0;
-
+  int iteration = 0;
   bool done = false;
-
-  while (iteration < MAX_ITERATIONS)
+  while (iteration < MAX_ITERATIONS && !done)
   {
     z = cuCsubf(z, cuCdivf(cuFz(z), cudFz(z)));
 
@@ -103,17 +101,16 @@ __global__ void NewtonGPUCalc(uchar *d_DataOut)
       // thrust::complex<float> diff = (z - roots[i]);
       cuFloatComplex diff = cuCsubf(z, roots[i]);
 
-      if (fabsf(diff.x) < EPSILON && std::fabsf(diff.y) < EPSILON)
+      if (std::fabsf(diff.x) < EPSILON && std::fabsf(diff.y) < EPSILON)
       {
         SetDataGPU(tx, ty, d_DataOut, i);
         done = true;
-        continue;
+        break;
       }
     }
     ++iteration;
+    __syncthreads();
   }
-  if (!done)
-    SetDataGPU(tx, ty, d_DataOut, 3);
 }
 
 void NewtonGPU(uchar* data)
@@ -123,7 +120,7 @@ void NewtonGPU(uchar* data)
 
   // Allocate memory
   uchar* data_gpu;
-  checkCudaErrors(cudaMalloc((void **)&data_gpu, PIXELDIM3 * sizeof(uchar)));
+  checkCudaErrors(cudaMalloc(&data_gpu, PIXELDIM3 * sizeof(uchar)));
   checkCudaErrors(cudaMemcpy(data_gpu, data, PIXELDIM3 * sizeof(uchar), cudaMemcpyHostToDevice));
 
   NewtonGPUCalc<<<DimGrid, DimBlock>>>(data_gpu);

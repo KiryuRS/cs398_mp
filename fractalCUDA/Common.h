@@ -33,12 +33,12 @@ typedef unsigned long long 			ull;
 #endif
 
 #define UINT_BITS					32
-#define BLOCK_SIZE 					32
+#define BLOCK_SIZE              32
 #define PIXELDIM		            512
 static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
 static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 
-#define EPSILON 10e-9
+#define EPSILON 10e-12
 
 ///////////////////////////////////////////////////////////////////////////
 // CUDA Includes
@@ -49,7 +49,6 @@ static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 #include <helper_cuda.h>
 #include <helper_functions.h>
 
-#define BLOCK_SIZE 16
 
 ///////////////////////////////////////////////////////////////////////////
 // Helper Function Calls and Misc.
@@ -65,7 +64,7 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 ///////////////////////////////////////////////////////////////////////////
 // Fractals Includes
 ///////////////////////////////////////////////////////////////////////////
-#include "henon.h"
+#include "Henon.h"
 #include "Newton.h"
 #include "BurningShip.h"
 #include "MandrelBrot.h"
