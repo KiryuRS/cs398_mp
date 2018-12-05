@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     //header.important_colors = 0;
 
     bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
-	size_t size = header.width * header.height;
+	size_t size = header.width * header.height * 3 * sizeof(uchar);
 	MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
