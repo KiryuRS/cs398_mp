@@ -62,49 +62,49 @@ __global__ void BurningShipDefaultCu(uchar *d_DataOut, uint limit)
 	}
 }
 
-__device__ double getC(double a, double b, double c)
+__forceinline__ __device__ double getC(double a, double b, double c)
 {
 	return __dsub_rd(__fma_rd(a,a,c) ,__dmul_rd(b, b));
 }
 
-__device__ double getb(double a, double b, double c)
+__forceinline__ __device__ double getb(double a, double b, double c)
 {
 	return __fma_rd(2.0, fabs(__dmul_rd(a, b)), c);
 }
 
-__device__ double getNorm(double a, double b)
+__forceinline__ __device__ double getNorm(double a, double b)
 {
 	return __fma_rd(a, a, __dmul_rd(b, b));
 }
 
 
-__device__ double simpleMulti(double a, double b)
+__forceinline__ __device__ double simpleMulti(double a, double b)
 {
 	return __dmul_rd(a, b);
 }
 
 
-__device__ double getIter(double n, double total)
+__forceinline__ __device__ double getIter(double n, double total)
 {
 	return __dsub_rd(1.0, __ddiv_rd(n, total));
 }
 
-__device__ double valueGet(double n, double total)
+__forceinline__ __device__ double valueGet(double n, double total)
 {
 	return __double2int_rd(__dmul_rd(255.0, __dsub_rd(1.0, __ddiv_rd(n, total))));
 }
 
-__device__ double getX(double a, double b, double c, double d)
+__forceinline__ __device__ double getX(double a, double b, double c, double d)
 {
 	return __ddiv_rd(__dmul_rd(__dadd_rd(a, b), c), d);
 }
 
-__device__ double getY(double a, double b, double c, double d, double e)
+__forceinline__ __device__ double getY(double a, double b, double c, double d, double e)
 {
 	return __ddiv_rd(__dmul_rd(__dsub_rd(__dadd_rd(a, c), ++b), d), e);
 }
 
-__device__ int getLoc(double a, double b, double c)
+__forceinline__ __device__ int getLoc(double a, double b, double c)
 {
 	return __double2int_rd(fma(b, c, a));
 
