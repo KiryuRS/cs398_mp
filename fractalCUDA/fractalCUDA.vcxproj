@@ -33,6 +33,8 @@
   <ItemGroup>
     <CudaCompile Include="BurningShip.cu" />
     <CudaCompile Include="FractalTree.cu" />
+    <CudaCompile Include="Mandrelbrot.cu" />
+    <CudaCompile Include="SierpinskiTriangle.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C144999E-B9AD-4C28-B718-541D736F1BDD}</ProjectGuid>

@@ -65,5 +65,11 @@
     <CudaCompile Include="BurningShip.cu">
       <Filter>Cheng Jiang</Filter>
     </CudaCompile>
+    <CudaCompile Include="Mandrelbrot.cu">
+      <Filter>Yong Kiat</Filter>
+    </CudaCompile>
+    <CudaCompile Include="SierpinskiTriangle.cu">
+      <Filter>Yong Kiat</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>
