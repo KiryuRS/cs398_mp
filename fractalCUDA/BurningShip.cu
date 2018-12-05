@@ -104,6 +104,13 @@ __device__ double getY(double a, double b, double c, double d, double e)
 	return __ddiv_rd(__dmul_rd(__dsub_rd(__dadd_rd(a, c), ++b), d), e);
 }
 
+__device__ int getLoc(double a, double b, double c)
+{
+	return __double2int_rd(fma(b, c, a));
+
+
+}
+
 
 __global__ void BurningShipIntrinsicsCu(uchar *d_DataOut, uint limit)
 {
@@ -130,19 +137,18 @@ __global__ void BurningShipIntrinsicsCu(uchar *d_DataOut, uint limit)
 
 	//double iter = getIter(n, iterationBS);
 	int value = valueGet(n, iterationBS);
-
-
+	int loc = getLoc(tx, PIXELDIM, ty);
 	if (value == 0)
 	{
-		d_DataOut[tx + PIXELDIM * ty] = value; // b
-		d_DataOut[tx + PIXELDIM * ty + PIXELDIM2] = value; // g
-		d_DataOut[tx + PIXELDIM * ty + PIXELDIM2 + PIXELDIM2] = value; // r
+		d_DataOut[loc] = value; // b
+		d_DataOut[loc + PIXELDIM2] = value; // g
+		d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = value; // r
 	}
 	else
 	{
-		d_DataOut[tx + PIXELDIM * ty] = value; // b
-		d_DataOut[tx + PIXELDIM * ty + PIXELDIM2] = value; // g
-		d_DataOut[tx + PIXELDIM * ty + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
+		d_DataOut[loc] = value; // b
+		d_DataOut[loc + PIXELDIM2] = value; // g
+		d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
 	}
 }
 

@@ -9,8 +9,7 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data, uint counter)
 
 	int dx = x2 - x1;
 	int dy = y2 - y1;
-
-	counter *= 12;
+	counter *= 5;
 
 	if (std::abs(dy) > std::abs(dx))
 	{
@@ -76,17 +75,12 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data, uint counter)
 }
 
 
-#define r_xcos(x,y) x*0.86602540378f - y*0.5f
-#define r_ycos(x,y) y*0.86602540378f + x*0.5f
-#define nr_xcos(x,y) x*0.86602540378f + y*0.5f
-#define nr_ycos(x,y) y*0.86602540378f - x*0.5f
-
 
 
 void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* data, uint counter)
 {
 	float length = std::sqrtf(VecX*VecX + VecY*VecY);
-	if (std::sqrtf(VecX*VecX + VecY*VecY) < 3.0f)
+	if (std::sqrtf(VecX*VecX + VecY*VecY) < lim)
 		return;
 	float vecX_n = VecX / length;
 	float vecY_n = VecY / length;
@@ -102,7 +96,7 @@ void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* 
 
 	//std::cout << d1_x << " " << d1_y << " h " << d2_x << " " << d2_y << std::endl;
 
-	length *= 13.0f / 16.0f;
+	length *= per;
 
 	SetLineDraw(locX, locY, locX + d1_x * length, locY + d1_y * length, data, counter + 1);
 	SetLineDraw(locX, locY, locX + d2_x * length, locY + d2_y * length, data, counter + 1);
@@ -113,14 +107,14 @@ void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* 
 }
 
 
-void FractalTreeCPU(uchar* data)
+void FractalTree::FractalTreeCPU(uchar* data)
 {
 
 	float x0 = PIXELDIM / 2.0f;
-	float y0 = 50.f;
+	float y0 = sY;
 
 	float x1 = PIXELDIM / 2.0f;
-	float y1 = 120.f;
+	float y1 = eY;
 
 	float dx = x1 - x0;
 	float dy = y1 - y0;
