@@ -61,7 +61,7 @@ void STriangle::TriangleCPU(uchar* data)
 			{
 				SetData(x, y,0, data);
 				//outFile << "* "; 
-	
+
 			}
 	
 		}
