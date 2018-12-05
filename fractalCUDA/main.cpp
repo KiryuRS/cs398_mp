@@ -1,8 +1,8 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_VERSION
-//#define ALVIN_VERSION
+#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION_BurningShip
-#define CHENGJIANG_VERSION_FractalTree
+//#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION
 
 #include "Common.h"
@@ -71,9 +71,11 @@ void PrintInformation(cudaDeviceProp& deviceProp)
 int main(int argc, char **argv)
 {
     // Declaring all the variables
-    StopWatchInterface	*hTimer = nullptr;
-    cudaDeviceProp        deviceProp;
-    bmp_header			header;
+    StopWatchInterface  *hTimer = nullptr;
+    cudaDeviceProp       deviceProp;
+    bmp_header           header;
+    uchar               *cpuOutput;
+    uchar               *gpuOutput;
     uchar               *cpuOutputPtr;
     uchar               *gpuOutputPtr;
 
@@ -106,8 +108,8 @@ int main(int argc, char **argv)
 
     bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
     bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
-	size_t size = header.width * header.height * 3 * sizeof(uchar);
-	MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
+    size_t size = header.width * header.height * 3 * sizeof(uchar);
+    //MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
 
@@ -186,7 +188,7 @@ int main(int argc, char **argv)
 	// Copying the contents over to our output file
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
-	char* out = new char[PIXELDIM3]{ };
+	//char* out = new char[PIXELDIM3]{ };
 	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
 
 	std::string gpuOutputFile{ "gpuOutput" };
@@ -196,11 +198,12 @@ int main(int argc, char **argv)
 		std::cerr << "..Please allocate memory for gpuOutput!\nUnable to output file into a bmp file!" << std::endl;
 		return -1;
 	}
-	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
-	bmp_write(out, &header, gpuOutputPtr);
+
+	bmp_write((char*)gpuOutputFile.c_str(), &header, gpuOutputPtr);
+  //delete[] cpuOutput;
 	delete[] cpuOutputPtr;
   delete[] gpuOutputPtr;
-	delete[] out;
+	//delete[] out;
 #pragma endregion
 
 	std::string command;
