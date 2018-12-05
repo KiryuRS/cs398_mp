@@ -18,8 +18,9 @@
 typedef unsigned int				uint;
 typedef unsigned char				uchar;
 typedef unsigned short				ushort;
-typedef unsigned long				ulong;
-typedef long long					llong;
+typedef unsigned long				ul;
+typedef long long					ll;
+typedef unsigned long long 			ull;
 
 #ifndef MAX
 #define MAX(a,b) \
@@ -32,6 +33,7 @@ typedef long long					llong;
 #endif
 
 #define UINT_BITS					32
+#define BLOCK_SIZE 					32
 #define PIXELDIM		            512
 static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
 static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;

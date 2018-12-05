@@ -1,7 +1,8 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_VERSION
-#define ALVIN_VERSION
-//#define CHENGJIANG_VERSION
+//#define ALVIN_VERSION
+//#define CHENGJIANG_VERSION_BurningShip
+#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION
 
 #include "Common.h"
@@ -105,8 +106,8 @@ int main(int argc, char **argv)
 
     bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
     bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
-    size_t size = header.width * header.height;
-    //MyCopy(cpuOutputPtr, cpuOutputPtr + PIXELDIM3, cpuOutput);
+	size_t size = header.width * header.height * 3 * sizeof(uchar);
+	MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
 
@@ -117,10 +118,14 @@ int main(int argc, char **argv)
 	const std::string fileOut{ "_YONGKIAT" };
 #elif defined ALVIN_VERSION
 	const std::string fileOut{ "_ALVIN" };
-#elif defined CHENGJIANG_VERSION
-	const std::string fileOut{ "_CHENGJIANG" };
+#elif defined CHENGJIANG_VERSION_BurningShip
+	const std::string fileOut{ "_CHENGJIANG_BurningShip" };
 
 	BurningShip ship;
+#elif defined CHENGJIANG_VERSION_FractalTree
+	const std::string fileOut{ "_CHENGJIANG_FractalTree" };
+
+	FractalTree tree;
 
 #elif defined KENNETH_VERSION
 	const std::string fileOut{ "_KENNETH" };
@@ -139,9 +144,10 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
     // HenonCPU(cpuOutputPtr);
     NewtonCPU(cpuOutputPtr);
-#elif defined CHENGJIANG_VERSION
+#elif defined CHENGJIANG_VERSION_BurningShip
 	ship.BurningShipCPU(cpuOutputPtr);
-	//FractalTreeCPU(cpuOutputPtr);
+#elif defined CHENGJIANG_VERSION_FractalTree
+	tree.FractalTreeCPU(cpuOutputPtr);
 #elif defined KENNETH_VERSION
 
 #endif
@@ -161,8 +167,10 @@ int main(int argc, char **argv)
 	//MandrelbrotGPU(gpuOutput);
 #elif defined ALVIN_VERSION
   NewtonGPU(gpuOutputPtr);
-#elif defined CHENGJIANG_VERSION
+#elif defined CHENGJIANG_VERSION_BurningShip
 	ship.BurningShipGPU(&gpuOutput);
+#elif defined CHENGJIANG_VERSION_FractalTree
+	tree.FractalTreeGPU(&gpuOutput);
 #elif defined KENNETH_VERSION
 
 #endif
@@ -203,9 +211,11 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 
 #elif defined ALVIN_VERSION
-  
-#elif defined CHENGJIANG_VERSION
+ 
+#elif defined CHENGJIANG_VERSION_BurningShip
 	ship.clearGPUMemory(&gpuOutput);
+#elif defined CHENGJIANG_VERSION_FractalTree
+	tree.clearGPUMemory(&gpuOutput);
 #elif defined KENNETH_VERSION
 
 #endif
