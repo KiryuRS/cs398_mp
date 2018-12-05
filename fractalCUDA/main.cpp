@@ -1,8 +1,8 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_VERSION
-//#define ALVIN_VERSION
+#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION
-#define KENNETH_VERSION
+//#define KENNETH_VERSION
 
 #include "Common.h"
 
@@ -73,9 +73,10 @@ int main(int argc, char **argv)
 	StopWatchInterface	*hTimer = nullptr;
 	cudaDeviceProp		deviceProp;
 	bmp_header			header;
-	uchar				cpuOutput[PIXELDIM3]{ 0 };
-	uchar               *cpuOutputPtr = nullptr;
+	uchar				cpuOutput[PIXELDIM3]{ };
+    uchar               *cpuOutputPtr;
 	uchar				*gpuOutput = nullptr;
+
 
 	// Printing the information
 	deviceProp.major = 0;
@@ -86,6 +87,7 @@ int main(int argc, char **argv)
 		   deviceProp.name, deviceProp.multiProcessorCount, deviceProp.major, deviceProp.minor);
 	PrintInformation(deviceProp);
 
+	cudaDeviceSynchronize();
     // Setup bmp_header
     //header.id1 = 'B';
     //header.id2 = 'M';
@@ -103,9 +105,10 @@ int main(int argc, char **argv)
     //header.important_colors = 0;
 
     bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
+	size_t size = header.width * header.height * 3 * sizeof(uchar);
+	MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
     header.h_resolution = 8192;
     header.v_resolution = 8192;
-	MyCopy(cpuOutputPtr, cpuOutputPtr + PIXELDIM3, cpuOutput);
 
 	sdkCreateTimer(&hTimer);
 
@@ -116,6 +119,9 @@ int main(int argc, char **argv)
 	const std::string fileOut{ "_ALVIN" };
 #elif defined CHENGJIANG_VERSION
 	const std::string fileOut{ "_CHENGJIANG" };
+
+	BurningShip ship;
+
 #elif defined KENNETH_VERSION
 	const std::string fileOut{ "_KENNETH" };
 #endif
@@ -127,13 +133,17 @@ int main(int argc, char **argv)
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_VERSION
-
+	TriangleCPU(cpuOutputPtr);
+	//MandrelbrotCPU(cpuOutputPtr);
+	
 #elif defined ALVIN_VERSION
-    HenonCPU(cpuOutputPtr);
+    // HenonCPU(cpuOutputPtr);
+    NewtonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
-
+	ship.BurningShipCPU(cpuOutputPtr);
+	//FractalTreeCPU(cpuOutputPtr);
 #elif defined KENNETH_VERSION
-	BrownianCPU(cpuOutputPtr);
+
 #endif
 	sdkStopTimer(&hTimer);
 	double dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
@@ -148,13 +158,13 @@ int main(int argc, char **argv)
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_VERSION
-
+	//MandrelbrotGPU(gpuOutput);
 #elif defined ALVIN_VERSION
 
 #elif defined CHENGJIANG_VERSION
-
+	ship.BurningShipGPU(&gpuOutput);
 #elif defined KENNETH_VERSION
-	BrownianGPU(cpuOutput, &gpuOutput);
+
 #endif
 	sdkStopTimer(&hTimer);
 	dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
@@ -168,6 +178,7 @@ int main(int argc, char **argv)
 	// Copying the contents over to our output file
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
+	char* out = new char[PIXELDIM3]{ };
 	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
 
 	std::string gpuOutputFile{ "gpuOutput" };
@@ -177,15 +188,26 @@ int main(int argc, char **argv)
 		std::cerr << "..Please allocate memory for gpuOutput!\nUnable to output file into a bmp file!" << std::endl;
 		return -1;
 	}
-	bmp_write((char*)gpuOutputFile.c_str(), &header, gpuOutput);
+	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
+	bmp_write(out, &header, gpuOutput);
+	delete[] cpuOutputPtr;
+	delete[] out;
 #pragma endregion
 
-	std::string command;
-	command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
-	system(command.c_str());
+	// std::string command;
+	// command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
+	// system(command.c_str());
 
-	delete[] cpuOutputPtr;
-	delete[] gpuOutput;
+	// For deallocating memory for GPUOutput (GPU side)
+#ifdef YONGKIAT_VERSION
+
+#elif defined ALVIN_VERSION
+
+#elif defined CHENGJIANG_VERSION
+	ship.clearGPUMemory(&gpuOutput);
+#elif defined KENNETH_VERSION
+
+#endif
 
 	return 0;
 }

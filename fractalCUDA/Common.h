@@ -12,15 +12,15 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
-#include <cmath>
-#include <ctime>
+#include <memory>
 #include "bmp.h"
 
 typedef unsigned int				uint;
 typedef unsigned char				uchar;
 typedef unsigned short				ushort;
-typedef unsigned long				ulong;
-typedef long long					llong;
+typedef unsigned long				ul;
+typedef long long					ll;
+typedef unsigned long long 			ull;
 
 #ifndef MAX
 #define MAX(a,b) \
@@ -33,9 +33,12 @@ typedef long long					llong;
 #endif
 
 #define UINT_BITS					32
+#define BLOCK_SIZE 					32
 #define PIXELDIM		            512
-static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM * sizeof(uchar);
-static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3 * sizeof(uchar);
+static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
+static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
+
+#define EPSILON 10e-9
 
 ///////////////////////////////////////////////////////////////////////////
 // CUDA Includes
@@ -61,4 +64,12 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 // Fractals Includes
 ///////////////////////////////////////////////////////////////////////////
 #include "henon.h"
-#include "BrownianTree.h"
+#include "Newton.h"
+#include "BurningShip.h"
+#include "MandrelBrot.h"
+#include "SierpinskiTriangle.h"
+#include "FractalTree.h"
+
+///////////////////////////////////////////////////////////////////////////
+// User Data Types
+///////////////////////////////////////////////////////////////////////////
