@@ -15,6 +15,7 @@
     <ClCompile Include="BurningShip.cpp" />
     <ClCompile Include="FractalTree.cpp" />
     <ClCompile Include="henon.cpp" />
+    <ClCompile Include="Newton.cpp" />
     <ClCompile Include="SierpinskiTriangle.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MandrelBrot.cpp" />
@@ -25,6 +26,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="FractalTree.h" />
     <ClInclude Include="henon.h" />
+    <ClInclude Include="Newton.h" />
     <ClInclude Include="SierpinskiTriangle.h" />
     <ClInclude Include="MandrelBrot.h" />
   </ItemGroup>

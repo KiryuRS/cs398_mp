@@ -36,6 +36,8 @@ typedef long long					llong;
 static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
 static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 
+#define EPSILON 10e-9
+
 ///////////////////////////////////////////////////////////////////////////
 // CUDA Includes
 ///////////////////////////////////////////////////////////////////////////
@@ -44,6 +46,8 @@ static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 #include <device_launch_parameters.h>
 #include <helper_cuda.h>
 #include <helper_functions.h>
+
+#define BLOCK_SIZE 16
 
 ///////////////////////////////////////////////////////////////////////////
 // Helper Function Calls and Misc.
@@ -60,6 +64,7 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 // Fractals Includes
 ///////////////////////////////////////////////////////////////////////////
 #include "henon.h"
+#include "Newton.h"
 #include "BurningShip.h"
 #include "MandrelBrot.h"
 #include "SierpinskiTriangle.h"

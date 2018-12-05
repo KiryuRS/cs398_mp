@@ -1,7 +1,7 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_VERSION
-//#define ALVIN_VERSION
-#define CHENGJIANG_VERSION
+#define ALVIN_VERSION
+//#define CHENGJIANG_VERSION
 //#define KENNETH_VERSION
 
 #include "Common.h"
@@ -137,7 +137,8 @@ int main(int argc, char **argv)
 	//MandrelbrotCPU(cpuOutputPtr);
 	
 #elif defined ALVIN_VERSION
-    HenonCPU(cpuOutputPtr);
+    // HenonCPU(cpuOutputPtr);
+    NewtonCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION
 	ship.BurningShipCPU(cpuOutputPtr);
 	//FractalTreeCPU(cpuOutputPtr);

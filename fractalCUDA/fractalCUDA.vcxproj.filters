@@ -32,6 +32,9 @@
     <ClCompile Include="FractalTree.cpp">
       <Filter>Cheng Jiang</Filter>
     </ClCompile>
+    <ClCompile Include="Newton.cpp">
+      <Filter>Alvin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -50,6 +53,9 @@
     </ClInclude>
     <ClInclude Include="FractalTree.h">
       <Filter>Cheng Jiang</Filter>
+    </ClInclude>
+    <ClInclude Include="Newton.h">
+      <Filter>Alvin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
