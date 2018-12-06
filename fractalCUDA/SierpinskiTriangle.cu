@@ -11,16 +11,16 @@ __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
 
 	if (x >= PIXELDIM || y >= PIXELDIM)
 		return;
-
+	int i = 0;
 	for (; y >= 0; y--)
 	{
 
 		// printing space till 
 		// the value of y 
-		for (int i = 0; i < y; i++)
+		for (; i < y; i++)
 		{
 			//outFile << " ";
-			d_DataOut[x + PIXELDIM *  y] = 0xff; // b
+			d_DataOut[x  + PIXELDIM *  y] = 0xff; // b
 			d_DataOut[x  + PIXELDIM * y + PIXELDIM2] = 0xff; // g
 			d_DataOut[x  + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xff; // r
 		
@@ -33,7 +33,7 @@ __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
 			// printing '*' at the appropriate position 
 			// is done by the and value of x and y 
 			// wherever value is 0 we have printed '*' 
-			if (x & y)
+			if ((x&y))
 			{
 
 				d_DataOut[x + PIXELDIM * y] = 0xff; // b

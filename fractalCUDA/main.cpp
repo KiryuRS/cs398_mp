@@ -1,6 +1,6 @@
 // @TODO: Uncomment the codes below to run the relevant test case
-#define YONGKIAT_MandrelVERSION
-//#define YONGKIAT_TriangleVERSION
+//#define YONGKIAT_MandrelVERSION
+#define YONGKIAT_TriangleVERSION
 //#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION_BurningShip
 //#define CHENGJIANG_VERSION_FractalTree
@@ -120,9 +120,10 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_MandrelVERSION
 	Mandrelbrot man;
 	const std::string fileOut{ "_YONGKIAT" };
-#elif YONGKIAT_TriangleVERSION
+#elif defined YONGKIAT_TriangleVERSION
 	const std::string fileOut{ "_YONGKIAT" };
 	STriangle tr;
+	
 	
 #elif defined ALVIN_VERSION
 	const std::string fileOut{ "_ALVIN" };
@@ -148,7 +149,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_MandrelVERSION
 
 	man.MandrelbrotCPU(cpuOutput);
-#elif YONGKIAT_TriangleVERSION
+#elif defined YONGKIAT_TriangleVERSION
 	tr.TriangleCPU(cpuOutputPtr);
 	//MandrelbrotCPU(cpuOutputPtr);
 	
@@ -177,7 +178,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_MandrelVERSION
 	man.MandrelbrotGPU(&gpuOutputPtr);
 
-#elif YONGKIAT_TriangleVERSION
+#elif defined YONGKIAT_TriangleVERSION
 	tr.TriangleGPU(&gpuOutputPtr);
 	//MandrelbrotGPU(gpuOutput);
 #elif defined ALVIN_VERSION
@@ -227,7 +228,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_MandrelVERSION
 	man.ClearMemory(&gpuOutputPtr);
 
-#elif YONGKIAT_TriangleVERSION
+#elif defined YONGKIAT_TriangleVERSION
 #elif defined ALVIN_VERSION
  
 #elif defined CHENGJIANG_VERSION_BurningShip
