@@ -1,8 +1,8 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_VERSION
-#define ALVIN_VERSION
+//#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION_BurningShip
-//#define CHENGJIANG_VERSION_FractalTree
+#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION
 
 #include "Common.h"
@@ -106,12 +106,9 @@ int main(int argc, char **argv)
     //header.colors = 0;
     //header.important_colors = 0;
 
-    bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
-    bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
-    size_t size = header.width * header.height * 3 * sizeof(uchar);
-    //MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
-    header.h_resolution = 8192;
-    header.v_resolution = 8192;
+    
+    
+
 
 	sdkCreateTimer(&hTimer);
 
@@ -120,6 +117,7 @@ int main(int argc, char **argv)
 	const std::string fileOut{ "_YONGKIAT" };
 #elif defined ALVIN_VERSION
 	const std::string fileOut{ "_ALVIN" };
+	bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
 #elif defined CHENGJIANG_VERSION_BurningShip
 	const std::string fileOut{ "_CHENGJIANG_BurningShip" };
 
@@ -139,6 +137,9 @@ int main(int argc, char **argv)
 	// We will run the relevant code based on whose technique it is
 	// SIGNATURE FOR FUNCTION CALL
 	// void FuncName(cpuOutput, gpuOutput)
+	bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
+
+
 #ifdef YONGKIAT_VERSION
 	TriangleCPU(cpuOutputPtr);
 	//MandrelbrotCPU(cpuOutputPtr);
@@ -158,6 +159,13 @@ int main(int argc, char **argv)
 	printf("\nCPU time (average) : %.5f sec, %.4f MB/sec\n", dAvgSecs, ((double)PIXELDIM3 * 1.0e-6) / dAvgSecs);
 	printf("CPU Fractal, Throughput = %.4f MB/s, Time = %.5f s, Size = %zu Bytes, NumDevsUsed = %u\n",
 		(1.0e-6 * (double)PIXELDIM3 / dAvgSecs), dAvgSecs, PIXELDIM3, 1u);
+
+	size_t size = header.width * header.height * 3 * sizeof(uchar);
+	//MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
+	header.h_resolution = 8192;
+	header.v_resolution = 8192;
+
+
 
 	// GPU  CODE HERE
 	sdkResetTimer(&hTimer);
@@ -202,7 +210,7 @@ int main(int argc, char **argv)
 	bmp_write((char*)gpuOutputFile.c_str(), &header, gpuOutputPtr);
   //delete[] cpuOutput;
 	delete[] cpuOutputPtr;
-  delete[] gpuOutputPtr;
+  
 	//delete[] out;
 #pragma endregion
 
@@ -214,7 +222,7 @@ int main(int argc, char **argv)
 #ifdef YONGKIAT_VERSION
 
 #elif defined ALVIN_VERSION
- 
+	delete[] gpuOutputPtr;
 #elif defined CHENGJIANG_VERSION_BurningShip
 	ship.clearGPUMemory(&gpuOutput);
 #elif defined CHENGJIANG_VERSION_FractalTree
