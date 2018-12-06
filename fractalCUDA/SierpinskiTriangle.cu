@@ -1,7 +1,7 @@
 #include "Common.h"
 
 
-#define TriangleSize (32)
+#define TriangleSize (1<< 5)
 
 
 __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
@@ -12,7 +12,7 @@ __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
 	if (x >= PIXELDIM || y >= PIXELDIM)
 		return;
 
-	for (int y = PIXELDIM - 1; y >= 0; y--)
+	for (; y >= 0; y--)
 	{
 
 		// printing space till 
@@ -27,7 +27,7 @@ __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
 
 		}
 		// printing '*' 
-		for (int x = 0; x + y < PIXELDIM; x++)
+		for (; x + y < PIXELDIM; x++)
 		{
 
 			// printing '*' at the appropriate position 
