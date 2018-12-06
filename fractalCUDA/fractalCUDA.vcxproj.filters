@@ -65,16 +65,14 @@
     <CudaCompile Include="BurningShip.cu">
       <Filter>Cheng Jiang</Filter>
     </CudaCompile>
-<<<<<<< HEAD
     <CudaCompile Include="Newton.cu">
       <Filter>Alvin</Filter>
-=======
+    </CudaCompile>
     <CudaCompile Include="Mandrelbrot.cu">
       <Filter>Yong Kiat</Filter>
     </CudaCompile>
     <CudaCompile Include="SierpinskiTriangle.cu">
       <Filter>Yong Kiat</Filter>
->>>>>>> 397b3d8125909dec104ee93ca8581f87d7c73f9b
     </CudaCompile>
   </ItemGroup>
 </Project>
