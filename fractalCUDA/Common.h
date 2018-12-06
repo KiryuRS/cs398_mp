@@ -65,6 +65,7 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 ///////////////////////////////////////////////////////////////////////////
 #include "henon.h"
 #include "BrownianTree.h"
+#include "SierpinskiCarpet.h"
 //#include "Newton.h"
 //#include "BurningShip.h"
 //#include "MandrelBrot.h"

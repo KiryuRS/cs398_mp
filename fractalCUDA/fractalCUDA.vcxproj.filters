@@ -23,6 +23,7 @@
     <ClCompile Include="BrownianTree.cpp">
       <Filter>Kenneth</Filter>
     </ClCompile>
+    <ClCompile Include="SierpinskiCarpet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -33,9 +34,15 @@
     <ClInclude Include="BrownianTree.h">
       <Filter>Kenneth</Filter>
     </ClInclude>
+    <ClInclude Include="SierpinskiCarpet.h">
+      <Filter>Kenneth</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="BrownianKernel.cu">
+      <Filter>Kenneth</Filter>
+    </CudaCompile>
+    <CudaCompile Include="SierpinskiCarpet.cu">
       <Filter>Kenneth</Filter>
     </CudaCompile>
   </ItemGroup>

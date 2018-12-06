@@ -72,22 +72,22 @@ __global__ void heatDistrCalculation(uchar *data, curandState *state, int py, in
 	int dx, dy;
 
 	// Every thread to perform the same operation and determine who add it first
-	while (true)
+	while (!mutex)
 	{
-		if (mutex)
-			break;
-
 		randomDirection(state, &dx);
 		randomDirection(state, &dy);
 
-		if (dx + px < 0 || dx + px >= PIXELDIM || dy + py < 0 || dy + py >= PIXELDIM)
-			randomPosition(state, &py, &px);
-		else if (data[(py + dy) * PIXELDIM + px + dx] != 0)
+		int dpx = dx + px;
+		int dpy = dy + py;
+
+		if (dpx < 0 || dpx >= PIXELDIM || dpy < 0 || dpy >= PIXELDIM)
+			break;
+
+		else if (data[dpy * PIXELDIM + dpx] != 0)
 		{
 			// Bumped into something
-			mutex = 1;
+			atomicOr(&mutex, 1);
 			data[py * PIXELDIM + px] = 1;
-			break;
 		}
 		else
 		{
@@ -124,13 +124,13 @@ __global__ void heatDistrUpdate(uchar *in, uchar *out)
 void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut)
 {
 	// Setup the variables
-	dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
-	dim3 dimGrid(ceil((float)PIXELDIM / BLOCK_SIZE), ceil((float)PIXELDIM / BLOCK_SIZE));
+	dim3 dimBlock(16, 16);
+	dim3 dimGrid(ceil((float)PIXELDIM / 16), ceil((float)PIXELDIM / 16));
 	
 	// Initialize
 	srand((uint)time(nullptr));
 	curandState *state = nullptr;
-	cudaMalloc(&state, sizeof(curandState));
+	checkCudaErrors(cudaMalloc(&state, sizeof(curandState)));
 	setup_kernel<<<1,1>>>(d_DataIn, state, (uint)time(nullptr));
 
 	int py, px;
@@ -146,6 +146,7 @@ void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut)
 
 		// Finding the position
 		heatDistrCalculation<<<dimGrid, dimBlock>>>(d_DataIn, state, py, px);
+		cudaDeviceSynchronize();
 	}
 	cudaFree(state);
 

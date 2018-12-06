@@ -143,7 +143,8 @@ int main(int argc, char **argv)
 	ship.BurningShipCPU(cpuOutputPtr);
 	//FractalTreeCPU(cpuOutputPtr);
 #elif defined KENNETH_VERSION
-	BrownianCPU(cpuOutputPtr);
+	// BrownianCPU(cpuOutputPtr);
+	SierpinskiCarpetCPU(nullptr);
 #endif
 	sdkStopTimer(&hTimer);
 	double dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
@@ -164,7 +165,8 @@ int main(int argc, char **argv)
 #elif defined CHENGJIANG_VERSION
 	ship.BurningShipGPU(&gpuOutput);
 #elif defined KENNETH_VERSION
-	BrownianGPU(cpuOutput, &gpuOutput);
+	// BrownianGPU(cpuOutput, &gpuOutput);
+	SierpinskiCarpetGPU(nullptr, nullptr);
 #endif
 	sdkStopTimer(&hTimer);
 	dAvgSecs = 1.0e-3 * (double)sdkGetTimerValue(&hTimer);
@@ -179,17 +181,16 @@ int main(int argc, char **argv)
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
 	char* out = new char[PIXELDIM3]{ };
-	bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
+	if (cpuOutputPtr)
+		bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
 
 	std::string gpuOutputFile{ "gpuOutput" };
 	gpuOutputFile += fileOut + ".bmp";
-	if (!gpuOutput)
+	if (gpuOutput)
 	{
-		std::cerr << "..Please allocate memory for gpuOutput!\nUnable to output file into a bmp file!" << std::endl;
-		return -1;
+		MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
+		bmp_write(out, &header, gpuOutput);
 	}
-	MyCopy(gpuOutputFile.begin(), gpuOutputFile.end(), out);
-	bmp_write(out, &header, gpuOutput);
 	delete[] cpuOutputPtr;
 	delete[] out;
 #pragma endregion
@@ -206,7 +207,8 @@ int main(int argc, char **argv)
 #elif defined CHENGJIANG_VERSION
 	ship.clearGPUMemory(&gpuOutput);
 #elif defined KENNETH_VERSION
-
+	BrownianClearGPU(&gpuOutput);
+	SierpinskiCarpetClearGPU(nullptr);
 #endif
 
 	return 0;

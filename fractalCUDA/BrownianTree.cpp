@@ -62,7 +62,7 @@ void BrownianGPU(uchar* cpuData, uchar** gpuData)
 
 	// Create memory
 	checkCudaErrors(cudaMalloc((void**)&dataIn, PIXELDIM2));
-	checkCudaErrors(cudaMalloc((void**)&dataOut, PIXELDIM3));
+	checkCudaErrors(cudaMallocManaged((void**)&dataOut, PIXELDIM3));
 	*gpuData = new uchar[PIXELDIM3];
 
 	// Copy memory to
@@ -83,5 +83,13 @@ void BrownianGPU(uchar* cpuData, uchar** gpuData)
 	cudaFree(dataIn);
 	cudaFree(dataOut);
 
-	cudaDeviceReset();
+}
+
+void BrownianClearGPU(uchar ** gpuData)
+{
+	if (gpuData)
+	{
+		delete[] * gpuData;
+	}
+	// cudaDeviceReset();
 }
