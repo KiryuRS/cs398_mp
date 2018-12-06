@@ -5,11 +5,14 @@
 
 void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data, uint counter)
 {
-	//std::cout << x1 << " " << y1 << "              " << x2 << " " << y2 << std::endl;
+	
+#ifdef fTdraw
 
+	/// draw of line
 	int dx = x2 - x1;
 	int dy = y2 - y1;
 	counter *= 5;
+	//counter = counter > 255 ? 255 : 0;
 
 	if (std::abs(dy) > std::abs(dx))
 	{
@@ -71,7 +74,7 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data, uint counter)
 	}
 
 
-
+#endif
 }
 
 
@@ -79,9 +82,12 @@ void SetLineDraw(int x1, int y1, int x2, int y2, uchar* data, uint counter)
 
 void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* data, uint counter)
 {
+	/// check length
 	float length = std::sqrtf(VecX*VecX + VecY*VecY);
 	if (std::sqrtf(VecX*VecX + VecY*VecY) < lim)
 		return;
+
+	/// get the new vector
 	float vecX_n = VecX / length;
 	float vecY_n = VecY / length;
 
@@ -94,22 +100,22 @@ void RecursionFractalTreeCPU(int locX, int locY, float VecX, float VecY, uchar* 
 	float d2_x = nr_xcos(vecX_n, vecY_n);
 	float d2_y = nr_ycos(vecX_n, vecY_n);
 
-	//std::cout << d1_x << " " << d1_y << " h " << d2_x << " " << d2_y << std::endl;
-
+	/// new length
 	length *= per;
 
+	///draw line
 	SetLineDraw(locX, locY, locX + d1_x * length, locY + d1_y * length, data, counter + 1);
 	SetLineDraw(locX, locY, locX + d2_x * length, locY + d2_y * length, data, counter + 1);
 
+	/// recursion
 	RecursionFractalTreeCPU(locX + d1_x * length, locY + d1_y * length, d1_x * length, d1_y * length, data, counter + 1);
 	RecursionFractalTreeCPU(locX + d2_x * length, locY + d2_y * length, d2_x * length, d2_y * length, data, counter + 1);
-	//std::cout << counter + 1 << std::endl;
 }
 
 
 void FractalTree::FractalTreeCPU(uchar* data)
 {
-
+	/// set up for the first line
 	float x0 = PIXELDIM / 2.0f;
 	float y0 = sY;
 
@@ -120,10 +126,10 @@ void FractalTree::FractalTreeCPU(uchar* data)
 	float dy = y1 - y0;
 
 	uint counter = 0;
-
+	/// draw the first line
 	SetLineDraw(x0, y0, x1, y1, data, counter);
 
-
+	/// recurse
 	RecursionFractalTreeCPU(x1, y1, dx, dy, data, counter);
 }
 
