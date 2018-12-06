@@ -35,6 +35,9 @@
     <ClCompile Include="Henon.cpp">
       <Filter>Alvin</Filter>
     </ClCompile>
+    <ClCompile Include="Ikeda.cpp">
+      <Filter>Alvin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -55,6 +58,9 @@
       <Filter>Alvin</Filter>
     </ClInclude>
     <ClInclude Include="Henon.h">
+      <Filter>Alvin</Filter>
+    </ClInclude>
+    <ClInclude Include="Ikeda.h">
       <Filter>Alvin</Filter>
     </ClInclude>
   </ItemGroup>

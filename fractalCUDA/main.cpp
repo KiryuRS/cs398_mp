@@ -1,7 +1,7 @@
 // @TODO: Uncomment the codes below to run the relevant test case
 //#define YONGKIAT_MandrelVERSION
-#define YONGKIAT_TriangleVERSION
-//#define ALVIN_VERSION
+//#define YONGKIAT_TriangleVERSION
+#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION_BurningShip
 //#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION
@@ -155,7 +155,8 @@ int main(int argc, char **argv)
 	
 #elif defined ALVIN_VERSION
     // HenonCPU(cpuOutputPtr);
-    NewtonCPU(cpuOutputPtr);
+    /// NewtonCPU(cpuOutputPtr);
+    IkedaCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION_BurningShip
 	ship.BurningShipCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION_FractalTree
