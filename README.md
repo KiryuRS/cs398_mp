@@ -10,7 +10,7 @@ WhyKay92:
 - IFS | Sierpinski Triangle                 [Completed]
 
 Kiryu:
-- Random Fractals | Self Avoiding Walks     [Completed]
+- IFS 			  | Sierpinski Carpet     	[Completed]
 - Random Fractals | Brownian Tree           [Completed]
 
 CJ:
