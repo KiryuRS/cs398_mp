@@ -40,6 +40,8 @@
     </ClCompile>
     <ClCompile Include="SierpinskiCarpet.cpp">
       <Filter>Kenneth</Filter>
+    <ClCompile Include="Ikeda.cpp">
+      <Filter>Alvin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +70,8 @@
     </ClInclude>
     <ClInclude Include="SierpinskiCarpet.h">
       <Filter>Kenneth</Filter>
+    <ClInclude Include="Ikeda.h">
+      <Filter>Alvin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +95,8 @@
     </CudaCompile>
     <CudaCompile Include="SierpinskiCarpet.cu">
       <Filter>Kenneth</Filter>
+    <CudaCompile Include="Ikeda.cu">
+      <Filter>Alvin</Filter>
     </CudaCompile>
   </ItemGroup>
 </Project>
