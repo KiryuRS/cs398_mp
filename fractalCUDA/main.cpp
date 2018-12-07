@@ -92,10 +92,10 @@ int main(int argc, char **argv)
     StopWatchInterface  *hTimer = nullptr;
     cudaDeviceProp       deviceProp;
     bmp_header           header;
-    uchar               *cpuOutput;
-    uchar               *gpuOutput;
-    uchar               *cpuOutputPtr;
-    uchar               *gpuOutputPtr;
+	uchar               *cpuOutput = nullptr;
+	uchar               *gpuOutput = nullptr;
+	uchar               *cpuOutputPtr = nullptr;
+	uchar               *gpuOutputPtr = nullptr;
 
     // Printing the information
     deviceProp.major = 0;
@@ -285,6 +285,10 @@ int main(int argc, char **argv)
 #if not defined KENNETH_VERSION_BROWNIANTREE || not defined KENNETH_VERSION_SIERPINSKICARPET
 	std::string command;
 	command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
+	system(command.c_str());
+#elif defined KENNETH_VERSION_SIERPINSKICARPET
+	std::string command;
+	command = "start WinMerge gpuOutput_KENNETH_Carpet.txt cpuOutput_KENNETH_Carpet.txt";
 	system(command.c_str());
 #endif
 
