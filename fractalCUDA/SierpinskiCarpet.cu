@@ -38,3 +38,8 @@ void SierpinskiCarpetKernel(uchar *d_DataIn, uint width, uint height)
 	// Calling the function
 	siecarpCalculation<<<dimGrid, dimBlock>>>(d_DataIn, width, height);
 }
+
+void SierpinskiCarpetFree()
+{
+	cudaDeviceReset();
+}

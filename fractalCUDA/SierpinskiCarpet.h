@@ -2,17 +2,18 @@
 #include "Common.h"
 #include <cstdio>
 
-#define SIERPINSKI_DEPTH		3
+#define SIERPINSKI_DEPTH		4
 #define WHITESPACE_PRINT		1 << 1
 #define HEX_PRINT				1 << 2
 #define NEWLINE_PRINT			1 << 3
-//#define SC_UNIFIED				100
+//#define SC_UNIFIED			100
 #define SC_PINNED				101
-//#define SC_MANAGED				102
+//#define SC_MANAGED			102
 
 void SierpinskiCarpetCPU(uchar *data);
 void SierpinskiCarpetGPU(uchar *cpuData, uchar **gpuData);
 void SierpinskiCarpetKernel(uchar *d_DataIn, uint width, uint height);
+void SierpinskiCarpetFree();
 
 class FileWriter
 {

@@ -320,6 +320,10 @@ int main(int argc, char **argv)
 	delete[] cpuOutput;
 	BrownianClearGPU(&gpuOutputPtr);
 
+#elif defined KENNETH_VERSION_SIERPINSKICARPET
+
+	SierpinskiCarpetFree();
+
 #endif
 	return 0;
 }

@@ -167,5 +167,4 @@ void SierpinskiCarpetGPU(uchar *, uchar **)
 	cudaFree(d_DataIn);
 
 #endif
-	cudaDeviceReset();
 }

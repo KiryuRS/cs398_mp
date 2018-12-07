@@ -57,6 +57,7 @@ void BrownianCPU(uchar* data)
 
 void BrownianGPU(uchar* cpuData, uchar** gpuData)
 {
+	return;
 	uchar *dataIn = nullptr;
 	uchar *dataOut = nullptr;
 
