@@ -80,5 +80,8 @@
     <CudaCompile Include="SierpinskiTriangle.cu">
       <Filter>Yong Kiat</Filter>
     </CudaCompile>
+    <CudaCompile Include="Ikeda.cu">
+      <Filter>Alvin</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

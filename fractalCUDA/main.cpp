@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 	
 #elif defined ALVIN_VERSION
     // HenonCPU(cpuOutputPtr);
-    /// NewtonCPU(cpuOutputPtr);
+    // NewtonCPU(cpuOutputPtr);
     IkedaCPU(cpuOutputPtr);
 #elif defined CHENGJIANG_VERSION_BurningShip
 	ship.BurningShipCPU(cpuOutputPtr);
@@ -183,7 +183,8 @@ int main(int argc, char **argv)
 	tr.TriangleGPU(&gpuOutputPtr);
 	//MandrelbrotGPU(gpuOutput);
 #elif defined ALVIN_VERSION
-  NewtonGPU(gpuOutputPtr);
+  //NewtonGPU(gpuOutputPtr);
+  IkedaGPU(gpuOutputPtr);
 #elif defined CHENGJIANG_VERSION_BurningShip
 	ship.BurningShipGPU(&gpuOutput);
 #elif defined CHENGJIANG_VERSION_FractalTree

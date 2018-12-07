@@ -29,9 +29,13 @@ __device__ cuFloatComplex cudFz(const cuFloatComplex& z)
   return cuCmulf(cuFloatComplex{ 3.0f, 0.0f }, cuCmulf(z, z));
 }
 
+__device__ int mutex = 0;
+
 __device__ void SetDataGPU(int x, int y, uchar* data, int color)
 {
   size_t index = y * PIXELDIM + x;
+  //while (0 != atomicCAS(&mutex, 0, 1)) {}
+
   if (index < PIXELDIM2)
   {
     switch (color)
@@ -53,11 +57,17 @@ __device__ void SetDataGPU(int x, int y, uchar* data, int color)
       break;
     }
   }
+
+  //atomicExch(&mutex, 0);
 }
 
 __global__ void NewtonGPUCalc(uchar *d_DataOut)
 {
   // __shared__ thrust::complex<float> roots[3];
+
+  //__shared__ int x_shared[BLOCK_SIZE];
+  //__shared__ int y_shared[BLOCK_SIZE];
+  //__shared__ int c_shared[BLOCK_SIZE];
 
   int tx = threadIdx.x + blockIdx.x * blockDim.x;
   int ty = threadIdx.y + blockIdx.y * blockDim.y;
@@ -104,6 +114,9 @@ __global__ void NewtonGPUCalc(uchar *d_DataOut)
       if (std::fabsf(diff.x) < EPSILON && std::fabsf(diff.y) < EPSILON)
       {
         SetDataGPU(tx, ty, d_DataOut, i);
+        //x_shared[tx % BLOCK_SIZE] = tx;
+        //y_shared[tx % BLOCK_SIZE] = ty;
+        //c_shared[tx % BLOCK_SIZE] = i;
         done = true;
         break;
       }
@@ -118,10 +131,10 @@ void NewtonGPU(uchar* data)
   dim3 DimBlock(BLOCK_SIZE, BLOCK_SIZE, 1);
   dim3 DimGrid((uint)ceil(((float)PIXELDIM) / BLOCK_SIZE), (uint)ceil(((float)PIXELDIM) / BLOCK_SIZE), 1);
 
-  // Allocate memory
   uchar* data_gpu;
   checkCudaErrors(cudaMalloc(&data_gpu, PIXELDIM3 * sizeof(uchar)));
   checkCudaErrors(cudaMemcpy(data_gpu, data, PIXELDIM3 * sizeof(uchar), cudaMemcpyHostToDevice));
+  checkCudaErrors(cudaGetLastError());
 
   NewtonGPUCalc<<<DimGrid, DimBlock>>>(data_gpu);
   checkCudaErrors(cudaGetLastError());

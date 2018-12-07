@@ -35,6 +35,7 @@
   <ItemGroup>
     <CudaCompile Include="BurningShip.cu" />
     <CudaCompile Include="FractalTree.cu" />
+    <CudaCompile Include="Ikeda.cu" />
     <CudaCompile Include="Newton.cu" />
     <CudaCompile Include="Mandrelbrot.cu" />
     <CudaCompile Include="SierpinskiTriangle.cu" />
