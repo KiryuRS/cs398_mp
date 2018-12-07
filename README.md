@@ -20,7 +20,7 @@ CJ:
 Koori:
 - Strange Attractors | Classical Hénon map  [Dropped]
 - ETF | Newton Fractals                     [Completed]
-- Strange Attractors | Ikeda Map			[Completed]
+- Chaotic Attractors | Ikeda Map			[Completed]
 
 
 
