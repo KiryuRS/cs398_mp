@@ -184,7 +184,8 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
 
     // HenonCPU(cpuOutputPtr);
-    NewtonCPU(cpuOutputPtr);
+    // NewtonCPU(cpuOutputPtr);
+	// IkedaCPU(cpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
@@ -233,6 +234,7 @@ int main(int argc, char **argv)
 #elif defined ALVIN_VERSION
 
 	NewtonGPU(gpuOutputPtr);
+    IkedaGPU(gpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
