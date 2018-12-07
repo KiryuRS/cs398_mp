@@ -14,6 +14,8 @@
 #define per 13.0f/16.0f
 #define lim 3.0f
 #define fTsingleBlock 1024
+#define fTsharedMem 4096
+#define fTdraw
 struct FractalTree
 {
 	uchar * ptr1 = nullptr;
