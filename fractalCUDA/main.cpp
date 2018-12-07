@@ -2,6 +2,7 @@
 //#define YONGKIAT_MandrelVERSION
 #define YONGKIAT_TriangleVERSION
 //#define ALVIN_VERSION
+//#define ALVIN_VERSION
 //#define CHENGJIANG_VERSION_BurningShip
 //#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION
