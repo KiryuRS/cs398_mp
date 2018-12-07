@@ -41,6 +41,9 @@
     <ClCompile Include="SierpinskiCarpet.cpp">
       <Filter>Kenneth</Filter>
     </ClCompile>
+    <ClCompile Include="Ikeda.cpp">
+      <Filter>Alvin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -69,6 +72,9 @@
     <ClInclude Include="SierpinskiCarpet.h">
       <Filter>Kenneth</Filter>
     </ClInclude>
+    <ClInclude Include="Ikeda.h">
+      <Filter>Alvin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="FractalTree.cu">
@@ -91,6 +97,9 @@
     </CudaCompile>
     <CudaCompile Include="SierpinskiCarpet.cu">
       <Filter>Kenneth</Filter>
+	</CudaCompile>
+    <CudaCompile Include="Ikeda.cu">
+      <Filter>Alvin</Filter>
     </CudaCompile>
   </ItemGroup>
 </Project>

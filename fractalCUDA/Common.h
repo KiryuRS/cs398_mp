@@ -38,7 +38,7 @@ typedef unsigned long long 			ull;
 static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
 static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 
-#define EPSILON						10e-12
+#define EPSILON						10e-9
 
 ///////////////////////////////////////////////////////////////////////////
 // CUDA Includes
@@ -46,6 +46,7 @@ static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
+#include "device_functions.h"
 #include <helper_cuda.h>
 #include <helper_functions.h>
 
@@ -66,6 +67,7 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 ///////////////////////////////////////////////////////////////////////////
 #include "Henon.h"
 #include "Newton.h"
+#include "Ikeda.h"
 #include "BurningShip.h"
 #include "MandrelBrot.h"
 #include "SierpinskiTriangle.h"

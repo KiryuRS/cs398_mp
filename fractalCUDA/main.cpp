@@ -2,11 +2,12 @@
 
 //#define YONGKIAT_MandrelVERSION
 //#define YONGKIAT_TriangleVERSION
-//#define ALVIN_VERSION
+#define ALVIN_Newton
+//#define ALVIN_Ikeda
 //#define CHENGJIANG_VERSION_BurningShip
 //#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION_BROWNIANTREE
-#define KENNETH_VERSION_SIERPINSKICARPET
+//#define KENNETH_VERSION_SIERPINSKICARPET
 
 #include "Common.h"
 
@@ -92,10 +93,10 @@ int main(int argc, char **argv)
     StopWatchInterface  *hTimer = nullptr;
     cudaDeviceProp       deviceProp;
     bmp_header           header;
-    uchar               *cpuOutput;
-    uchar               *gpuOutput;
-    uchar               *cpuOutputPtr;
-    uchar               *gpuOutputPtr;
+	uchar               *cpuOutput = nullptr;
+	uchar               *gpuOutput = nullptr;
+	uchar               *cpuOutputPtr = nullptr;
+	uchar               *gpuOutputPtr = nullptr;
 
     // Printing the information
     deviceProp.major = 0;
@@ -142,9 +143,14 @@ int main(int argc, char **argv)
 	const std::string fileOut{ "_YONGKIAT_Triangle" };
 	STriangle tr;
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton
 
-	const std::string fileOut{ "_ALVIN" };
+	const std::string fileOut{ "_ALVIN_Newton" };
+	bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
+
+#elif defined ALVIN_Ikeda
+
+	const std::string fileOut{ "_ALVIN_Ikeda" };
 	bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
@@ -181,10 +187,13 @@ int main(int argc, char **argv)
 
 	tr.TriangleCPU(cpuOutputPtr);
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton
 
-    // HenonCPU(cpuOutputPtr);
-    NewtonCPU(cpuOutputPtr);
+	NewtonCPU(cpuOutputPtr);
+
+#elif defined ALVIN_Ikeda
+
+    IkedaGPU(cpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
@@ -230,9 +239,13 @@ int main(int argc, char **argv)
 
 	tr.TriangleGPU(&gpuOutputPtr);
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton
 
 	NewtonGPU(gpuOutputPtr);
+
+#elif defined ALVIN_Ikeda
+
+    IkedaGPU(gpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
@@ -286,6 +299,10 @@ int main(int argc, char **argv)
 	std::string command;
 	command = "start WinMerge " + gpuOutputFile + " " + cpuOutputFile;
 	system(command.c_str());
+#elif defined KENNETH_VERSION_SIERPINSKICARPET
+	std::string command;
+	command = "start WinMerge gpuOutput_KENNETH_Carpet.txt cpuOutput_KENNETH_Carpet.txt";
+	system(command.c_str());
 #endif
 
 	// For deallocating memory for GPUOutput (GPU side)
@@ -297,7 +314,7 @@ int main(int argc, char **argv)
 
 	tr.ClearMemory(&gpuOutputPtr);
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton | defined ALVIN_Ikeda
 
 	delete[] gpuOutputPtr;
 

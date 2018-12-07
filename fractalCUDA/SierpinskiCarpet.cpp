@@ -2,12 +2,7 @@
 
 void SierpinskiCarpetCPU(uchar *)
 {
-	FILE *file = fopen("cpuOutput_KENNETH_Carpet.txt", "w");
-	if (!file)
-	{
-		std::cerr << "Something went wrong!" << std::endl;
-		return;
-	}
+	FileWriter fw{ "cpuOutput_KENNETH_Carpet.txt" };
 
 	// Initialization
 	int dim = 1, d = 0;
@@ -41,32 +36,26 @@ void SierpinskiCarpetCPU(uchar *)
 		switch (data[i])
 		{
 		case WHITESPACE_PRINT:
-			fprintf(file, " ");
+			fw.Write("  ");
 			break;
 
 		case HEX_PRINT:
-			fprintf(file, "#");
+			fw.Write("##");
 			break;
 
 		case NEWLINE_PRINT:
-			fprintf(file, "\n");
+			fw.Write("\n");
 			break;
 		}
 	}
 
 	// Destruction
-	fclose(file);
 	delete[] data;
 }
 
 void SierpinskiCarpetGPU(uchar *, uchar **)
 {
-	FILE* file = fopen("gpuOutput_KENNETH_Carpet.txt", "w");
-	if (!file)
-	{
-		std::cerr << "Something went wrong!" << std::endl;
-		return;
-	}
+	FileWriter fw{ "gpuOutput_KENNETH_Carpet.txt" };
 
 	// Initialization
 	uchar *d_DataIn = nullptr;
@@ -77,9 +66,10 @@ void SierpinskiCarpetGPU(uchar *, uchar **)
 	uint width = dim + 2;			// accounting for 2 extra spaces
 	uint height = dim + 2;			// just to make it a square
 	uint size = width * height;
-	uchar *data = new uchar[size]{ 0 };
 
 	// CUDA Creation
+#if defined SC_MANAGED
+	uchar *data = new uchar[size]{ 0 };
 	checkCudaErrors(cudaMalloc((void**)&d_DataIn, size * sizeof(uchar)));
 
 	// Calculation
@@ -90,27 +80,92 @@ void SierpinskiCarpetGPU(uchar *, uchar **)
 	checkCudaErrors(cudaMemcpy(data, d_DataIn, size * sizeof(uchar), cudaMemcpyDeviceToHost));
 	cudaDeviceSynchronize();
 
-	// Copy to File
+	// Copy to file
 	for (uint i = 0; i != size; ++i)
 	{
 		switch (data[i])
 		{
 		case WHITESPACE_PRINT:
-			fprintf(file, " ");
+			fw.Write("  ");
 			break;
 
 		case HEX_PRINT:
-			fprintf(file, "#");
+			fw.Write("##");
 			break;
 
 		case NEWLINE_PRINT:
-			fprintf(file, "\n");
+			fw.Write("\n");
 			break;
 		}
 	}
 
 	// Destruction here
-	fclose(file);
 	delete[] data;
+	cudaFree(d_DataIn);
+
+#elif defined SC_UNIFIED
+	checkCudaErrors(cudaMallocManaged((void**)&d_DataIn, size * sizeof(uchar)));
+
+	// Calculation
+	SierpinskiCarpetKernel(d_DataIn, width, height);
+	cudaDeviceSynchronize();
+
+	// Copy to file
+	for (uint i = 0; i != size; ++i)
+	{
+		switch (d_DataIn[i])
+		{
+		case WHITESPACE_PRINT:
+			fw.Write("  ");
+			break;
+
+		case HEX_PRINT:
+			fw.Write("##");
+			break;
+
+		case NEWLINE_PRINT:
+			fw.Write("\n");
+			break;
+		}
+	}
+
+	// Destruction here
+	cudaFree(d_DataIn);
+
+#elif defined SC_PINNED
+	checkCudaErrors(cudaMalloc((void**)&d_DataIn, size * sizeof(uchar)));
+	uchar *data = nullptr;
+	checkCudaErrors(cudaHostAlloc((void**)&data, size * sizeof(uchar), cudaHostAllocDefault));
+
+	// Calculation
+	SierpinskiCarpetKernel(d_DataIn, width, height);
+	cudaDeviceSynchronize();
+
+	// Copy to memory
+	checkCudaErrors(cudaMemcpy(data, d_DataIn, size * sizeof(uchar), cudaMemcpyDeviceToHost));
+
+	// Copy to file
+	for (uint i = 0; i != size; ++i)
+	{
+		switch (data[i])
+		{
+		case WHITESPACE_PRINT:
+			fw.Write("  ");
+			break;
+
+		case HEX_PRINT:
+			fw.Write("##");
+			break;
+
+		case NEWLINE_PRINT:
+			fw.Write("\n");
+			break;
+		}
+	}
+
+	cudaFreeHost(data);
+	cudaFree(d_DataIn);
+
+#endif
 	cudaDeviceReset();
 }
