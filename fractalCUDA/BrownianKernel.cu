@@ -1,4 +1,14 @@
-
+/******************************************************************************/
+/*!
+@file   BrownianTree.cu
+@par    Purpose: Implementation of BrownianTree CUDA kernel
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Kenneth
+@par    Email: t.weigangkenneth\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "Common.h"
 #include <curand.h>
 #include <curand_kernel.h>

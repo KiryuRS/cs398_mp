@@ -1,6 +1,15 @@
-#include "henon.h"
-
-#include <iostream>
+/******************************************************************************/
+/*!
+@file   Henon.cpp
+@par    Purpose: Implementation of Henon
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Alvin
+@par    Email: alvin.tan\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
+#include "Henon.h"
 
 struct bits24
 {

@@ -17,10 +17,10 @@
     <ClCompile Include="FractalTree.cpp" />
     <ClCompile Include="Henon.cpp" />
     <ClCompile Include="Ikeda.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Newton.cpp" />
     <ClCompile Include="SierpinskiCarpet.cpp" />
     <ClCompile Include="SierpinskiTriangle.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="MandrelBrot.cpp" />
   </ItemGroup>
   <ItemGroup>

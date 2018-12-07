@@ -1,7 +1,19 @@
-// @TODO: Uncomment the codes below to run the relevant test case
+/******************************************************************************/
+/*!
+@file   Main.cpp
+@par    Purpose: Main file of the program
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Kenneth, Alvin, YongKiat, ChengJiang
+@par    Email:	t.weigangkenneth\@digipen.edu, alvin.tan\@digipen.edu,
+				yongkiat.ong\@digipen.edu, chengjiang.tham\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 
 //#define YONGKIAT_MandrelVERSION
 //#define YONGKIAT_TriangleVERSION
+//#define ALVIN_Henon
 #define ALVIN_Newton
 //#define ALVIN_Ikeda
 //#define CHENGJIANG_VERSION_BurningShip
@@ -109,24 +121,8 @@ int main(int argc, char **argv)
 	cudaDeviceSynchronize();
 
     // Setup bmp_header
-    //header.id1 = 'B';
-    //header.id2 = 'M';
-    //header.file_size = PIXELDIM3;
-    //header.reserved = 0;
-    //header.bmp_data_offset = 54;
-    //header.bmp_header_size = sizeof(bmp_header);
-    //header.width    = PIXELDIM;
-    //header.height   = PIXELDIM;
-    //header.planes = 1;
-    //header.bits_per_pixel = 24;
-    //header.h_resolution = 3800;
-    //header.v_resolution = 3800;
-    //header.colors = 0;
-    //header.important_colors = 0;
-
 	bmp_read("blank_bmp.bmp", &header, &cpuOutputPtr);
 	size_t size = header.width * header.height * 3 * sizeof(uchar);
-	//MyCopy(cpuOutputPtr, cpuOutputPtr + size, cpuOutput);
 	header.h_resolution = 8192;
 	header.v_resolution = 8192;
 
@@ -142,6 +138,10 @@ int main(int argc, char **argv)
 
 	const std::string fileOut{ "_YONGKIAT_Triangle" };
 	STriangle tr;
+
+#elif defined ALVIN_Henon
+
+	const std::string fileOut{ "_ALVIN_Henon" };
 
 #elif defined ALVIN_Newton
 
@@ -181,11 +181,15 @@ int main(int argc, char **argv)
 	// void FuncName(cpuOutput, gpuOutput)
 #ifdef YONGKIAT_MandrelVERSION
 
-	man.MandrelbrotCPU(cpuOutput);
+	man.MandrelbrotCPU(cpuOutputPtr);
 
 #elif defined YONGKIAT_TriangleVERSION
 
 	tr.TriangleCPU(cpuOutputPtr);
+
+#elif defined ALVIN_Henon
+
+	HenonCPU(cpuOutputPtr);
 
 #elif defined ALVIN_Newton
 
@@ -239,6 +243,10 @@ int main(int argc, char **argv)
 
 	tr.TriangleGPU(&gpuOutputPtr);
 
+#elif defined Alvin_Henon
+
+
+
 #elif defined ALVIN_Newton
 
 	NewtonGPU(gpuOutputPtr);
@@ -249,11 +257,11 @@ int main(int argc, char **argv)
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
-	ship.BurningShipGPU(&gpuOutput);
+	ship.BurningShipGPU(&gpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_FractalTree
 
-	tree.FractalTreeGPU(&gpuOutput);
+	tree.FractalTreeGPU(&gpuOutputPtr);
 
 #elif defined KENNETH_VERSION_BROWNIANTREE
 
@@ -277,21 +285,16 @@ int main(int argc, char **argv)
 	// Copying the contents over to our output file
 	std::string cpuOutputFile{ "cpuOutput" };
 	cpuOutputFile += fileOut + ".bmp";
-	//char* out = new char[PIXELDIM3]{ };
+
 	if (cpuOutputPtr)
-	{
 		bmp_write((char*)cpuOutputFile.c_str(), &header, cpuOutputPtr);
-	}
 	std::string gpuOutputFile{ "gpuOutput" };
 	gpuOutputFile += fileOut + ".bmp";
+
 	if (gpuOutputPtr)
-	{
 		bmp_write((char*)gpuOutputFile.c_str(), &header, gpuOutputPtr);
-	}
-	
-	//delete[] cpuOutput;
+
 	delete[] cpuOutputPtr;
-	//delete[] out;
 
 #pragma endregion
 
@@ -314,17 +317,21 @@ int main(int argc, char **argv)
 
 	tr.ClearMemory(&gpuOutputPtr);
 
+#elif defined ALVIN_Henon
+
+
+
 #elif defined ALVIN_Newton | defined ALVIN_Ikeda
 
 	delete[] gpuOutputPtr;
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
-	ship.clearGPUMemory(&gpuOutput);
+	ship.clearGPUMemory(&gpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_FractalTree
 
-	tree.clearGPUMemory(&gpuOutput);
+	tree.clearGPUMemory(&gpuOutputPtr);
 
 #elif defined KENNETH_VERSION_BROWNIANTREE
 

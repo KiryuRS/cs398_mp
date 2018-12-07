@@ -1,3 +1,14 @@
+/******************************************************************************/
+/*!
+@file   Ikeda.cpp
+@par    Purpose: Implementation of Ikeda
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Alvin
+@par    Email: alvin.tan\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "Ikeda.h"
 
 // https://en.wikipedia.org/wiki/Ikeda_map

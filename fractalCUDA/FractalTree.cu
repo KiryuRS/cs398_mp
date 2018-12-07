@@ -1,3 +1,14 @@
+/******************************************************************************/
+/*!
+@file   FractalTree.cu
+@par    Purpose: Implementation of FractalTree CUDA kernel
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author ChengJiang
+@par    Email: chengjiang.tham\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "Common.h"
 
 #define FractalTreeIterative2			// FractalTreeDefault, FractalTreeIterative, FractalTreeIterativeSM, FractalTreeIterative2

@@ -1,3 +1,15 @@
+/******************************************************************************/
+/*!
+@file   Common.h
+@par    Purpose: Header file for all common includes
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Kenneth, Alvin, Yong Kiat, Cheng Jiang
+@par    Email:	t.weigangkenneth\@digipen.edu, alvin.tan\@digipen.edu,
+yongkiat.ong\@digipen.edu, chengjiang.tham\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #pragma once
 
 ///////////////////////////////////////////////////////////////////////////
@@ -33,7 +45,7 @@ typedef unsigned long long 			ull;
 #endif
 
 #define UINT_BITS					32
-#define BLOCK_SIZE					32
+#define BLOCK_SIZE					16
 #define PIXELDIM		            512
 static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
 static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;

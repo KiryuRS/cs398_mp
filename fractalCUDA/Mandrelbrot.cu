@@ -1,3 +1,14 @@
+/******************************************************************************/
+/*!
+@file   MandrelBrot.cu
+@par    Purpose: Implementation of MandrelBrot CUDA kernel
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author YongKiat
+@par    Email: yongkiat.ong\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "Common.h"
 
 

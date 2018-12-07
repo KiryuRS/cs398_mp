@@ -1,3 +1,14 @@
+/******************************************************************************/
+/*!
+@file   SierpinskiCarpet.cu
+@par    Purpose: Implementation of SierpinskiCarpet CUDA kernel
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Kenneth
+@par    Email: t.weigangkenneth\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "Common.h"
 
 __global__ void siecarpCalculation(uchar *d_DataIn, uint width, uint height)

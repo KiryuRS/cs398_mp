@@ -1,3 +1,14 @@
+/******************************************************************************/
+/*!
+@file   Ikeda.cu
+@par    Purpose: Implementation of Ikeda CUDA kernel
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Alvin
+@par    Email: alvin.tan\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "Common.h"
 
 #if defined (DOUBLE_VERSION)

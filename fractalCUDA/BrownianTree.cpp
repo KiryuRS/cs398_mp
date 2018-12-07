@@ -1,3 +1,14 @@
+/******************************************************************************/
+/*!
+@file   BrownianTree.cpp
+@par    Purpose: Implementation of BrownianTree
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author Kenneth
+@par    Email: t.weigangkenneth\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "BrownianTree.h"
 
 void BrownianSetData(uint x, uint y, uchar value, uchar* data)

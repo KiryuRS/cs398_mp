@@ -1,3 +1,14 @@
+/******************************************************************************/
+/*!
+@file   BurningShip.cpp
+@par    Purpose: Implementation of BurningShip
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author ChengJiang
+@par    Email: chengjiang.tham\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include "BurningShip.h"
 #include <iostream>
 

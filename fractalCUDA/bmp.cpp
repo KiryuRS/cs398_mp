@@ -1,3 +1,13 @@
+/******************************************************************************/
+/*!
+@file   bmp.cpp
+@par    Purpose: Implementation for Bitmap read and write
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author DigiPen
+@date   07/12/2018
+*/
+/******************************************************************************/
 #include <iostream>
 #include <fstream>
 #include <cstdlib>

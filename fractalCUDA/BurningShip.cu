@@ -1,4 +1,15 @@
-﻿#include "Common.h"
+﻿/******************************************************************************/
+/*!
+@file   BurningShip.cu
+@par    Purpose: Implementation of BurningShip CUDA kernel
+@par    Language: C++
+@par    Platform: Visual Studio 2015, Windows 10 64-bit
+@author ChengJiang
+@par    Email: chengjiang.tham\@digipen.edu
+@date   07/12/2018
+*/
+/******************************************************************************/
+#include "Common.h"
 
 #define shipBlock_size 32
 
