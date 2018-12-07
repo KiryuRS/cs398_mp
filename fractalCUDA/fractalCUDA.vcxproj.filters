@@ -23,7 +23,9 @@
     <ClCompile Include="BrownianTree.cpp">
       <Filter>Kenneth</Filter>
     </ClCompile>
-    <ClCompile Include="SierpinskiCarpet.cpp" />
+    <ClCompile Include="SierpinskiCarpet.cpp">
+      <Filter>Kenneth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />

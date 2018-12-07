@@ -124,8 +124,8 @@ __global__ void heatDistrUpdate(uchar *in, uchar *out)
 void BrownianGPUKernel(uchar *d_DataIn, uchar *d_DataOut)
 {
 	// Setup the variables
-	dim3 dimBlock(16, 16);
-	dim3 dimGrid(ceil((float)PIXELDIM / 16), ceil((float)PIXELDIM / 16));
+	dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+	dim3 dimGrid(ceil((float)PIXELDIM / BLOCK_SIZE), ceil((float)PIXELDIM / BLOCK_SIZE));
 	
 	// Initialize
 	srand((uint)time(nullptr));

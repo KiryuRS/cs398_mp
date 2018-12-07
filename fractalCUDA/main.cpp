@@ -207,7 +207,7 @@ int main(int argc, char **argv)
 #elif defined CHENGJIANG_VERSION
 	ship.clearGPUMemory(&gpuOutput);
 #elif defined KENNETH_VERSION
-	BrownianClearGPU(&gpuOutput);
+	// BrownianClearGPU(&gpuOutput);
 	SierpinskiCarpetClearGPU(nullptr);
 #endif
 

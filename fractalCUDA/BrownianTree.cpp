@@ -88,8 +88,6 @@ void BrownianGPU(uchar* cpuData, uchar** gpuData)
 void BrownianClearGPU(uchar ** gpuData)
 {
 	if (gpuData)
-	{
-		delete[] * gpuData;
-	}
-	// cudaDeviceReset();
+		delete[] *gpuData;
+	cudaDeviceReset();
 }
