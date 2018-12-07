@@ -2,8 +2,8 @@
 
 //#define YONGKIAT_MandrelVERSION
 //#define YONGKIAT_TriangleVERSION
-//#define ALVIN_Newton
-#define ALVIN_Ikeda
+#define ALVIN_Newton
+//#define ALVIN_Ikeda
 //#define CHENGJIANG_VERSION_BurningShip
 //#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION_BROWNIANTREE
@@ -189,11 +189,11 @@ int main(int argc, char **argv)
 
 #elif defined ALVIN_Newton
 
-	NewtonGPU(gpuOutputPtr);
+	NewtonCPU(cpuOutputPtr);
 
 #elif defined ALVIN_Ikeda
 
-    IkedaGPU(gpuOutputPtr);
+    IkedaGPU(cpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
