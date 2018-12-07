@@ -20,7 +20,7 @@ CJ:
 Koori:
 - Strange Attractors | Classical Hénon map  [Dropped]
 - ETF | Newton Fractals                     [Completed]
-- FSR | Sierpinski carpet / Cantor set      [In-Progress]
+- Strange Attractors | Ikeda Map			[Completed]
 
 
 
