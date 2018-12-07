@@ -2,10 +2,8 @@
 
 
 #define BrotSize 32
-#define iterationBS 64 
-#define magBS 2.5
-#define shiftBS -PIXELDIM/2.0
-#define shiftBS2 -PIXELDIM/1.5
+
+
 
 __global__ void MandrelbrotKernel(uchar* d_DataOut, uint limit)
 {
@@ -19,11 +17,11 @@ __global__ void MandrelbrotKernel(uchar* d_DataOut, uint limit)
 	double b = 0.0;
 	double norm2 = 0.0;
 	int n;
-	double x = (double)((tx + shiftBS2) *magBS) / PIXELDIM;
-	double y = (double)((PIXELDIM - 1 - ty + shiftBS) *magBS) / PIXELDIM;
+	double x = (double)((tx + shiftM2) *magM) / PIXELDIM;
+	double y = (double)((PIXELDIM - 1 - ty + shiftM) *magM) / PIXELDIM;
 	double iter = 1;
 
-	for (n = 0; norm2 < 4.0 && n < iterationBS; ++n)
+	for (n = 0; norm2 < 4.0 && n < iterationM; ++n)
 	{
 		double c = a*a - b*b + x;
 		b = 2.0 * a * b + y;
@@ -31,7 +29,7 @@ __global__ void MandrelbrotKernel(uchar* d_DataOut, uint limit)
 		norm2 = a*a + b*b;
 
 	}
-	iter -= double(n) / iterationBS;
+	iter -= double(n) / iterationM;
 	int val = (int)(255 * iter);
 
 
@@ -66,16 +64,6 @@ void Mandrelbrot::MandrelbrotGPU(uchar** gpuOutput)
 
 	*gpuOutput = (uchar *)malloc(PIXELDIM3 * sizeof(uchar));
 	checkCudaErrors(cudaMemcpy(*gpuOutput, ptr1, PIXELDIM3 * sizeof(uchar), cudaMemcpyDeviceToHost));
-	//uchar* d_DataIn = nullptr;
-	//uchar* d_DataOut = nullptr;
-	//
-	//cudaMalloc((void **)&d_DataIn, PIXELDIM3);
-	//cudaMalloc((void **)&d_DataOut, PIXELDIM3);
-	//cudaMemcpy(d_DataIn, cpuOutput, PIXELDIM3, cudaMemcpyHostToDevice);
-	//
-	////Calls kernel function for mandrelbrot
-	//
-	//cudaMemcpy(*gpuOutput, d_DataOut, PIXELDIM3, cudaMemcpyDeviceToHost);
 #endif
 }
 void Mandrelbrot::ClearMemory(uchar** data)

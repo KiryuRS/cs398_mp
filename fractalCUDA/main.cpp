@@ -2,11 +2,12 @@
 
 //#define YONGKIAT_MandrelVERSION
 //#define YONGKIAT_TriangleVERSION
-//#define ALVIN_VERSION
+#define ALVIN_Newton
+//#define ALVIN_Ikeda
 //#define CHENGJIANG_VERSION_BurningShip
 //#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION_BROWNIANTREE
-#define KENNETH_VERSION_SIERPINSKICARPET
+//#define KENNETH_VERSION_SIERPINSKICARPET
 
 #include "Common.h"
 
@@ -142,9 +143,14 @@ int main(int argc, char **argv)
 	const std::string fileOut{ "_YONGKIAT_Triangle" };
 	STriangle tr;
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton
 
-	const std::string fileOut{ "_ALVIN" };
+	const std::string fileOut{ "_ALVIN_Newton" };
+	bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
+
+#elif defined ALVIN_Ikeda
+
+	const std::string fileOut{ "_ALVIN_Ikeda" };
 	bmp_read("blank_bmp.bmp", &header, &gpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
@@ -181,11 +187,13 @@ int main(int argc, char **argv)
 
 	tr.TriangleCPU(cpuOutputPtr);
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton
 
-    // HenonCPU(cpuOutputPtr);
-    // NewtonCPU(cpuOutputPtr);
-	// IkedaCPU(cpuOutputPtr);
+	NewtonCPU(cpuOutputPtr);
+
+#elif defined ALVIN_Ikeda
+
+    IkedaGPU(cpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
 
@@ -231,9 +239,12 @@ int main(int argc, char **argv)
 
 	tr.TriangleGPU(&gpuOutputPtr);
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton
 
 	NewtonGPU(gpuOutputPtr);
+
+#elif defined ALVIN_Ikeda
+
     IkedaGPU(gpuOutputPtr);
 
 #elif defined CHENGJIANG_VERSION_BurningShip
@@ -303,7 +314,7 @@ int main(int argc, char **argv)
 
 	tr.ClearMemory(&gpuOutputPtr);
 
-#elif defined ALVIN_VERSION
+#elif defined ALVIN_Newton | defined ALVIN_Ikeda
 
 	delete[] gpuOutputPtr;
 

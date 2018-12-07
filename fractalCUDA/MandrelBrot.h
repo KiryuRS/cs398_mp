@@ -4,6 +4,11 @@
 #include "Common.h"
 
 
+#define iterationM 1000
+#define magM 2.5
+#define shiftM -PIXELDIM/2.0
+#define shiftM2 -PIXELDIM/1.5
+
 struct Mandrelbrot
 {
 	uchar *ptr1 = nullptr;

@@ -9,25 +9,25 @@ __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
 	int y = threadIdx.y + blockIdx.y* blockDim.y;
 
-	if (x >= PIXELDIM || y >= PIXELDIM)
-		return;
+	//if (x >= PIXELDIM || y >= PIXELDIM)
+	//	return;
 	int i = 0;
-	for (; y >= 0; y--)
+	for (; y >= 0; --y)
 	{
 
 		// printing space till 
 		// the value of y 
-		for (; i < y; i++)
+		for (; i < y; ++i)
 		{
 			//outFile << " ";
-			d_DataOut[x  + PIXELDIM *  y] = 0xff; // b
-			d_DataOut[x  + PIXELDIM * y + PIXELDIM2] = 0xff; // g
-			d_DataOut[x  + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xff; // r
+			d_DataOut[x  + PIXELDIM *  y] = 0XFF; // b
+			d_DataOut[x  + PIXELDIM * y + PIXELDIM2] = 0XFF; // g
+			d_DataOut[x  + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0XFF; // r
 		
 
 		}
 		// printing '*' 
-		for (; x + y < PIXELDIM; x++)
+		for (; x + y < PIXELDIM;++x)
 		{
 
 			// printing '*' at the appropriate position 
@@ -36,9 +36,9 @@ __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
 			if ((x&y))
 			{
 
-				d_DataOut[x + PIXELDIM * y] = 0xff; // b
-				d_DataOut[x + PIXELDIM * y + PIXELDIM2] = 0xff; // g
-				d_DataOut[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xff; // r
+				d_DataOut[x + PIXELDIM * y] = 0XFF; // b
+				d_DataOut[x + PIXELDIM * y + PIXELDIM2] = 0XFF; // g
+				d_DataOut[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0XFF; // r
 				//outFile << " " << " ";
 				//SetData(x, y, 255, data);
 				//SetData(x, y, 255, data);
@@ -47,7 +47,7 @@ __global__ void SierpinskiTriangleKernel(uchar* d_DataOut,uint limit)
 			{
 				d_DataOut[x + PIXELDIM * y] = 0x00; // b
 				d_DataOut[x + PIXELDIM * y + PIXELDIM2] = 0x00; // g
-				d_DataOut[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0x00; // r
+				d_DataOut[x + PIXELDIM * y + PIXELDIM2 + PIXELDIM2] = 0xff; // r
 				//SetData(x, y, 0, data);
 				//outFile << "* "; 
 				
