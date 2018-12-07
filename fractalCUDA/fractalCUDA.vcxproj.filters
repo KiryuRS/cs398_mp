@@ -35,6 +35,12 @@
     <ClCompile Include="Henon.cpp">
       <Filter>Alvin</Filter>
     </ClCompile>
+    <ClCompile Include="BrownianTree.cpp">
+      <Filter>Kenneth</Filter>
+    </ClCompile>
+    <ClCompile Include="SierpinskiCarpet.cpp">
+      <Filter>Kenneth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bmp.h" />
@@ -57,6 +63,12 @@
     <ClInclude Include="Henon.h">
       <Filter>Alvin</Filter>
     </ClInclude>
+    <ClInclude Include="BrownianTree.h">
+      <Filter>Kenneth</Filter>
+    </ClInclude>
+    <ClInclude Include="SierpinskiCarpet.h">
+      <Filter>Kenneth</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="FractalTree.cu">
@@ -73,6 +85,12 @@
     </CudaCompile>
     <CudaCompile Include="SierpinskiTriangle.cu">
       <Filter>Yong Kiat</Filter>
+    </CudaCompile>
+    <CudaCompile Include="BrownianKernel.cu">
+      <Filter>Kenneth</Filter>
+    </CudaCompile>
+    <CudaCompile Include="SierpinskiCarpet.cu">
+      <Filter>Kenneth</Filter>
     </CudaCompile>
   </ItemGroup>
 </Project>

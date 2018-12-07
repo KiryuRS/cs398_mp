@@ -33,12 +33,12 @@ typedef unsigned long long 			ull;
 #endif
 
 #define UINT_BITS					32
-#define BLOCK_SIZE              32
+#define BLOCK_SIZE					32
 #define PIXELDIM		            512
 static constexpr size_t PIXELDIM2 = PIXELDIM * PIXELDIM;
 static constexpr size_t PIXELDIM3 = PIXELDIM * PIXELDIM * 3;
 
-#define EPSILON 10e-12
+#define EPSILON						10e-12
 
 ///////////////////////////////////////////////////////////////////////////
 // CUDA Includes
@@ -70,6 +70,8 @@ OutputIter MyCopy(InputIter begin, InputIter end, OutputIter start)
 #include "MandrelBrot.h"
 #include "SierpinskiTriangle.h"
 #include "FractalTree.h"
+#include "SierpinskiCarpet.h"
+#include "BrownianTree.h"
 
 ///////////////////////////////////////////////////////////////////////////
 // User Data Types
