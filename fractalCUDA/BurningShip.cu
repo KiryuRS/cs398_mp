@@ -5,12 +5,19 @@
 #define BurningshipUnified			// BurningshipDefault, BurningshipUnified, BurningshipPinned
 #define BurnInstrinic				// BurnDefault,BurnInstrinic
 
+__device__
+double fastAbsD(double in)
+{
+	return fabs(in);
+}
+
+
 
 __global__ void BurningShipDefaultCu(uchar *d_DataOut, uint limit)
 {
-	/// get position
 	int tx = threadIdx.x + blockIdx.x * blockDim.x;
 	int ty = threadIdx.y + blockIdx.y * blockDim.y;
+	//int value = 0;
 
 	if (tx >= PIXELDIM || ty >= PIXELDIM)
 		return;
@@ -19,28 +26,28 @@ __global__ void BurningShipDefaultCu(uchar *d_DataOut, uint limit)
 	double b = 0.0;
 	double norm2 = 0.0;
 	int n;
-	/// the shifting of the image to look at the ships
 	double x = (double)((tx + shiftBS2) *magBS) / PIXELDIM;
 	double y = (double)((PIXELDIM - 1 - ty + shiftBS) *magBS) / PIXELDIM;
 	double iter = 1;
-
-	/// iteration fns
+	//std::cout << " start " << x << " " << y << std::endl;
 	for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) {
-		/// calculation
-		double c = a*a - b*b + x;
-		b = 2.0*a*b;
-		b = b < 0 ? -b : b;
-		b += y;
-		a = c;
-		norm2 = a*a + b*b;
+		
+		 double c = a*a - b*b + x;
+			//b = 2.0*fabs(a*b) + y;
+		 b = 2.0*a*b;
+		 b = b < 0 ? -b : b;
+		 b += y;
+			a = c;
+			norm2 = a*a + b*b;
+		
+		//std::cout << a << " " << b << std::endl;
+		//std::cout << " s " << n << " " << norm2 << std::endl;
 	}
-
-	/// to get the color value
 	iter -= double(n) / iterationBS;
 	int value = (int)(255 * iter);
 	
 	
-	/// color the pixel
+	
 	if (value == 0)
 	{
 		d_DataOut[tx + PIXELDIM * ty] = value; // b
@@ -54,16 +61,6 @@ __global__ void BurningShipDefaultCu(uchar *d_DataOut, uint limit)
 		d_DataOut[tx + PIXELDIM * ty + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
 	}
 }
-
-
-/// Instrinics set up
-
-
-__forceinline__ __device__ double fastAbsD(double in)
-{
-	return fabs(in);
-}
-
 
 __forceinline__ __device__ double getC(double a, double b, double c)
 {
@@ -117,9 +114,9 @@ __forceinline__ __device__ int getLoc(double a, double b, double c)
 
 __global__ void BurningShipIntrinsicsCu(uchar *d_DataOut, uint limit)
 {
-	/// get the location
 	int tx = threadIdx.x + blockIdx.x * blockDim.x;
 	int ty = threadIdx.y + blockIdx.y * blockDim.y;
+	//int value = 0;
 
 	if (tx >= PIXELDIM || ty >= PIXELDIM)
 		return;
@@ -128,24 +125,19 @@ __global__ void BurningShipIntrinsicsCu(uchar *d_DataOut, uint limit)
 	double b = 0.0;
 	double norm2 = 0.0;
 	int n;
-	/// image zoom and shift to look at ship
 	double x = getX(tx, shiftBS2, magBS, PIXELDIM);
 	double y = getY(PIXELDIM, ty, shiftBS, magBS, PIXELDIM);
-
-	/// iterative fns 
 	for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) {
-		/// calculation using instrinics
+
 		double c = getC(a,b,x);
 		b = getb(a, b, y);
 		a = c;
 		norm2 = getNorm(a,b);
 	}
 
-	/// get the value to color
+	//double iter = getIter(n, iterationBS);
 	int value = valueGet(n, iterationBS);
 	int loc = getLoc(tx, PIXELDIM, ty);
-
-	/// color pixel
 	if (value == 0)
 	{
 		d_DataOut[loc] = value; // b
@@ -181,7 +173,8 @@ void BurningShip::BurningShipGPU(uchar** data)
 #elif defined BurnInstrinic
 	BurningShipIntrinsicsCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
 #endif
-
+	//
+	//
 	cudaDeviceSynchronize();
 
 	*data = (uchar *)malloc(PIXELDIM3 * sizeof(uchar));
@@ -215,7 +208,8 @@ void BurningShip::BurningShipGPU(uchar** data)
 #elif defined BurnInstrinic
 	BurningShipIntrinsicsCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
 #endif
-
+	//
+	//
 	cudaDeviceSynchronize();
 	checkCudaErrors(cudaHostAlloc((void **)data, PIXELDIM3 * sizeof(uchar), cudaHostAllocDefault));
 	checkCudaErrors(cudaMemcpy(*data, ptr1, PIXELDIM3 * sizeof(uchar), cudaMemcpyDeviceToHost));

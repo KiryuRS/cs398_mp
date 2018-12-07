@@ -4,7 +4,6 @@
 
 void BurningShipSetData(int x, int y, int value, uchar* data)
 {
-	/// to color the pixel
 	if (value == 0)
 	{
 		data[x + PIXELDIM * y] = value; // b
@@ -25,31 +24,31 @@ void BurningShipSetData(int x, int y, int value, uchar* data)
 
 void BurningShip::BurningShipCPU(uchar* data)
 {
+	//FractalTreeCPU(data);
+	
 	int value = 0;
 	for (int j = 0; j < PIXELDIM; ++j) {
 		for (int i = 0; i < PIXELDIM; ++i) {
 	
 			double a = 0.0, b = 0.0, norm2 = 0.0;
 			int n;
-
-			/// get the new x and y of zoom and shift to look at the ship
 			double x = (double)((i + shiftBS2) *magBS) / PIXELDIM;
 			double y = (double)((PIXELDIM - 1 - j + shiftBS) *magBS) / PIXELDIM;
-
-			/// iteration count
+			//std::cout << " start " << x << " " << y << std::endl;
 			for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) {
-				/// calculation
 				double c = a*a - b*b + x;
 				b = 2.0*std::fabs(a*b) + y;
 				a = c;
 				norm2 = a*a + b*b;
+				//std::cout << a << " " << b << std::endl;
+				//std::cout << " s " << n << " " << norm2 << std::endl;
 			}
-			/// color value
 			int value = (int)(255 * (1 - double(n) / iterationBS));
-
-			/// color the pixel
+			//std::cout << n << " ";
 			BurningShipSetData(i, j, value, data);
 		}
+		//std::cout << std::endl;
+		//BitBlt(dc, j, 0, 1, rect.bottom, buffer_dc, j, 0, SRCCOPY);
 	}
 	
 }
