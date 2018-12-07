@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-
+#include <iostream>
 struct STriangle
 {
 

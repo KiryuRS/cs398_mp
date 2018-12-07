@@ -1,14 +1,8 @@
 #include "MandrelBrot.h"
 #include <iostream>
-//#define iterationBS 64 
-//#define magBS 0.2
-//#define shiftBS -PIXELDIM/1.6
-//#define shiftBS2 -PIXELDIM/0.111
 
-#define iterationBS 64 
-#define magBS 2.5
-#define shiftBS -PIXELDIM/2.0
-#define shiftBS2 -PIXELDIM/1.5
+
+
 
 void MandrelBrotSetData(int x, int y, int value, uchar* data)
 {
@@ -39,9 +33,9 @@ void Mandrelbrot::MandrelbrotCPU(uchar* data)
 
 			double a = 0.0, b = 0.0, norm2 = 0.0;
 			int n;
-			double x = static_cast<double>(i + shiftBS2) *magBS / PIXELDIM;
-			double y = static_cast<double>(PIXELDIM - 1 - j + shiftBS) *magBS / PIXELDIM;
-			for (n = 0; norm2 < 4.0 && n < iterationBS; ++n) 
+			double x = static_cast<double>(i + shiftM2) *magM / PIXELDIM;
+			double y = static_cast<double>(PIXELDIM - 1 - j + shiftM) *magM / PIXELDIM;
+			for (n = 0; norm2 < 4.0 && n < iterationM; ++n) 
 			{
 				double c = a*a - b*b + x;
 				b = 2.0*a*b + y;
@@ -49,7 +43,7 @@ void Mandrelbrot::MandrelbrotCPU(uchar* data)
 				norm2 = a*a + b*b;
 			
 			}
-			int value = int(255 * (1 - double(n) / iterationBS));
+			int value = int(255 * (1 - double(n) / iterationM));
 		
 			MandrelBrotSetData(i, j, value, data);
 		}
@@ -57,12 +51,3 @@ void Mandrelbrot::MandrelbrotCPU(uchar* data)
 	}
 }
 
-//__device__ int Mandrelbrot(int x, int y, int maxIter)
-//{
-//
-//}
-//
-//__global__ void MandrelbrotKernel(uchar* cpu, uchar* gpu)
-//{
-//
-//}
