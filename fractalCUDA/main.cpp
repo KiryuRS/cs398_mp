@@ -14,9 +14,9 @@
 //#define YONGKIAT_MandrelVERSION
 //#define YONGKIAT_TriangleVERSION
 //#define ALVIN_Henon
-#define ALVIN_Newton
+//#define ALVIN_Newton
 //#define ALVIN_Ikeda
-//#define CHENGJIANG_VERSION_BurningShip
+#define CHENGJIANG_VERSION_BurningShip
 //#define CHENGJIANG_VERSION_FractalTree
 //#define KENNETH_VERSION_BROWNIANTREE
 //#define KENNETH_VERSION_SIERPINSKICARPET

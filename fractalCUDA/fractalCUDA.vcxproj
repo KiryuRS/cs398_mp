@@ -126,6 +126,7 @@
       <AdditionalCompilerOptions>
       </AdditionalCompilerOptions>
       <AdditionalOptions>-fmad=false %(AdditionalOptions)</AdditionalOptions>
+      <CodeGeneration>compute_61,sm_61</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

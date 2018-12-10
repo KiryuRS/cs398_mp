@@ -10,11 +10,12 @@
 */
 /******************************************************************************/
 #include "Common.h"
+#include <cuda_fp16.h>
 
 #define shipBlock_size 32
 
-#define BurningshipUnified			// BurningshipDefault, BurningshipUnified, BurningshipPinned
-#define BurnInstrinic				// BurnDefault,BurnInstrinic
+#define BurningshipDefault			// BurningshipDefault, BurningshipUnified, BurningshipPinned
+#define BurnHalf					// BurnDefault,BurnInstrinic, BurnHalf
 
 
 __global__ void BurningShipDefaultCu(uchar *d_DataOut, uint limit)
@@ -97,7 +98,6 @@ __forceinline__ __device__ double simpleMulti(double a, double b)
 	return __dmul_rd(a, b);
 }
 
-
 __forceinline__ __device__ double getIter(double n, double total)
 {
 	return __dsub_rd(1.0, __ddiv_rd(n, total));
@@ -124,6 +124,151 @@ __forceinline__ __device__ int getLoc(double a, double b, double c)
 
 
 }
+
+#pragma region HALF_PRECISION
+
+__forceinline__ __device__ half halfAbs(const half& in)
+{
+	// return __hlt(in, 0.f) ? __hneg(in) : in;
+	return fabs(in);
+}
+
+__forceinline__ __device__ half halfGetC(const half& a, const half& b, const half& c)
+{
+	return __hsub(__hfma(a, a, c), __hmul(b, b));
+}
+
+__forceinline__ __device__ half halfGetB(const half& a, const half& b, const half& c)
+{
+	return __hfma(2.0f, fabs(__hmul(a, b)), c);
+}
+
+__forceinline__ __device__ half halfGetNorm(const half& a, const half& b)
+{
+	return __hfma(a, a, __hmul(b, b));
+}
+
+__forceinline__ __device__ half halfGetIter(const half& n, const half& total)
+{
+	return __hsub(half{ 1.0f }, __hdiv(n, total));
+}
+
+__forceinline__ __device__ int halfValueGet(const half& n, const half& total)
+{
+	return __half2int_rd(__hmul(half{ 255.0f }, __hsub(half{ 1.0f }, __hdiv(n, total))));
+}
+
+__forceinline__ __device__ half halfGetX(const half& a, const half& b, const half& c, const half& d)
+{
+	return __hdiv(__hmul(__hadd(a, b), c), d);
+}
+
+__forceinline__ __device__ half halfGetY(const half& a, const half& b, const half& c, const half& d, const half& e)
+{
+	return __hdiv(__hmul(__hsub(__hadd(a, c), __hadd(b, half{ 1.0f })), d), e);
+}
+
+//__forceinline__ __device__ half halfGetLoc(double)
+//{
+//	return __half2int_rd(fma(b, c, a));
+//}
+
+__global__ void BurningShipHalfPrecisionCu(uchar *d_DataOut, uint limit)
+{
+	///// get the location
+	//int tx = threadIdx.x + blockIdx.x * blockDim.x;
+	//int ty = threadIdx.y + blockIdx.y * blockDim.y;
+
+	//if (tx >= PIXELDIM || ty >= PIXELDIM)
+	//	return;
+
+	//half a = 0.0f;
+	//half b = 0.0f;
+	//half norm2 = 0.0f;
+	//int n;
+	///// image zoom and shift to look at ship
+	//half x = halfGetX((float)tx, shiftBS2, magBS, (float)PIXELDIM);
+	//half y = halfGetY((float)PIXELDIM, (float)ty, shiftBS, magBS, (float)PIXELDIM);
+
+	///// iterative fns 
+	//for (n = 0; __hlt(norm2, half{ 4.0 }) && n < iterationBS; ++n)
+	//{
+	//	/// calculation using instrinics
+	//	half c = halfGetC(a, b, x);
+	//	b = halfGetB(a, b, y);
+	//	a = c;
+	//	norm2 = halfGetNorm(a, b);
+	//}
+
+	///// get the value to color
+	//int value = halfValueGet((float)n, (float)iterationBS);
+	//int loc = halfGetLoc((float)tx, (float)PIXELDIM, (float)ty);
+
+	///// color pixel
+	//if (value == 0)
+	//{
+	//	if (loc > PIXELDIM2) return;
+	//	d_DataOut[loc] = value; // b
+	//	d_DataOut[loc + PIXELDIM2] = value; // g
+	//	d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = value; // r
+	//}
+	//else
+	//{
+	//	if (loc > PIXELDIM2) return;
+	//	d_DataOut[loc] = value; // b
+	//	d_DataOut[loc + PIXELDIM2] = value; // g
+	//	d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
+	//}
+
+
+	// get the location
+	int tx = threadIdx.x + blockIdx.x * blockDim.x;
+	int ty = threadIdx.y + blockIdx.y * blockDim.y;
+
+	if (tx >= PIXELDIM || ty >= PIXELDIM)
+		return;
+
+	half a{ 0.0f };
+	half b{ 0.0f };
+	half norm2{ 0.0f };
+	int n;
+	// image zoom and shift to look at ship
+	half x = halfGetX((float)tx, shiftBS2, magBS, (float)PIXELDIM);
+	half y = halfGetY((float)PIXELDIM, (float)ty, shiftBS, magBS, (float)PIXELDIM);
+
+	// iterative fns 
+	for (n = 0; __hlt(norm2, 4.0f) && n < iterationBS; ++n)
+	{
+		// calculation using instrinics
+		half c = halfGetC(a, b, x);
+		b = halfGetB(a, b, y);
+		a = c;
+		norm2 = halfGetNorm(a, b);
+	}
+
+	// get the value to color
+	int value = halfValueGet((float)n, (float)iterationBS);
+	int loc = getLoc(tx, PIXELDIM, ty);
+
+	// color pixel
+	if (loc < PIXELDIM2)
+	{
+		if (value == 0)
+		{
+			d_DataOut[loc] = value; // b
+			d_DataOut[loc + PIXELDIM2] = value; // g
+			d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = value; // r
+		}
+		else
+		{
+			d_DataOut[loc] = value; // b
+			d_DataOut[loc + PIXELDIM2] = value; // g
+			d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
+		}
+	}
+}
+
+#pragma endregion
 
 
 __global__ void BurningShipIntrinsicsCu(uchar *d_DataOut, uint limit)
@@ -191,6 +336,9 @@ void BurningShip::BurningShipGPU(uchar** data)
 	BurningShipDefaultCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
 #elif defined BurnInstrinic
 	BurningShipIntrinsicsCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
+#elif defined BurnHalf
+	BurningShipHalfPrecisionCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
+	checkCudaErrors(cudaGetLastError());
 #endif
 
 	cudaDeviceSynchronize();
@@ -209,6 +357,8 @@ void BurningShip::BurningShipGPU(uchar** data)
 	BurningShipDefaultCu << <DimGrid, DimBlock >> > (*data, PIXELDIM);
 #elif defined BurnInstrinic
 	BurningShipIntrinsicsCu << <DimGrid, DimBlock >> > (*data, PIXELDIM);
+#elif defined BurnHalf
+	BurningShipHalfPrecisionCu << <DimGrid, DimBlock >> > (*data, PIXELDIM);
 #endif
 
 	cudaDeviceSynchronize();
@@ -225,6 +375,8 @@ void BurningShip::BurningShipGPU(uchar** data)
 	BurningShipDefaultCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
 #elif defined BurnInstrinic
 	BurningShipIntrinsicsCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
+#elif defined BurnHalf
+	BurningShipHalfPrecisionCu << <DimGrid, DimBlock >> > (ptr1, PIXELDIM);
 #endif
 
 	cudaDeviceSynchronize();
