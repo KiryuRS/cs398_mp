@@ -12,7 +12,7 @@
 #include "Common.h"
 #include <cuda_fp16.h>
 
-#define shipBlock_size 32
+#define shipBlock_size 16
 
 #define BurningshipDefault			// BurningshipDefault, BurningshipUnified, BurningshipPinned
 #define BurnHalf					// BurnDefault,BurnInstrinic, BurnHalf
@@ -136,21 +136,25 @@ __forceinline__ __device__ half halfAbs(const half& in)
 __forceinline__ __device__ half halfGetC(const half& a, const half& b, const half& c)
 {
 	return __hsub(__hfma(a, a, c), __hmul(b, b));
+  //return half{ __dsub_rd(__fma_rd(a, a, c), __dmul_rd(b, b)) };
 }
 
 __forceinline__ __device__ half halfGetB(const half& a, const half& b, const half& c)
 {
 	return __hfma(2.0f, fabs(__hmul(a, b)), c);
+  //return half{ __fma_rd(2.0, fabs(__dmul_rd(a, b)), c) };
 }
 
 __forceinline__ __device__ half halfGetNorm(const half& a, const half& b)
 {
 	return __hfma(a, a, __hmul(b, b));
+  //return half{ __fma_rd(a, a, __dmul_rd(b, b)) };
 }
 
 __forceinline__ __device__ half halfGetIter(const half& n, const half& total)
 {
 	return __hsub(half{ 1.0f }, __hdiv(n, total));
+  //return half{ __dsub_rd(1.0, __ddiv_rd(n, total)) };
 }
 
 __forceinline__ __device__ int halfValueGet(const half& n, const half& total)
@@ -161,66 +165,22 @@ __forceinline__ __device__ int halfValueGet(const half& n, const half& total)
 __forceinline__ __device__ half halfGetX(const half& a, const half& b, const half& c, const half& d)
 {
 	return __hdiv(__hmul(__hadd(a, b), c), d);
+  //return half{ __ddiv_rd(__dmul_rd(__dadd_rd(a, b), c), d) };
 }
 
 __forceinline__ __device__ half halfGetY(const half& a, const half& b, const half& c, const half& d, const half& e)
 {
 	return __hdiv(__hmul(__hsub(__hadd(a, c), __hadd(b, half{ 1.0f })), d), e);
+  //return half{ __ddiv_rd(__dmul_rd(__dsub_rd(__dadd_rd(a, c), ((float)b)+1.0f), d), e) };
 }
-
-//__forceinline__ __device__ half halfGetLoc(double)
+//
+//__forceinline__ __device__ half halfGetLoc(double a, double b, double c)
 //{
 //	return __half2int_rd(fma(b, c, a));
 //}
 
 __global__ void BurningShipHalfPrecisionCu(uchar *d_DataOut, uint limit)
 {
-	///// get the location
-	//int tx = threadIdx.x + blockIdx.x * blockDim.x;
-	//int ty = threadIdx.y + blockIdx.y * blockDim.y;
-
-	//if (tx >= PIXELDIM || ty >= PIXELDIM)
-	//	return;
-
-	//half a = 0.0f;
-	//half b = 0.0f;
-	//half norm2 = 0.0f;
-	//int n;
-	///// image zoom and shift to look at ship
-	//half x = halfGetX((float)tx, shiftBS2, magBS, (float)PIXELDIM);
-	//half y = halfGetY((float)PIXELDIM, (float)ty, shiftBS, magBS, (float)PIXELDIM);
-
-	///// iterative fns 
-	//for (n = 0; __hlt(norm2, half{ 4.0 }) && n < iterationBS; ++n)
-	//{
-	//	/// calculation using instrinics
-	//	half c = halfGetC(a, b, x);
-	//	b = halfGetB(a, b, y);
-	//	a = c;
-	//	norm2 = halfGetNorm(a, b);
-	//}
-
-	///// get the value to color
-	//int value = halfValueGet((float)n, (float)iterationBS);
-	//int loc = halfGetLoc((float)tx, (float)PIXELDIM, (float)ty);
-
-	///// color pixel
-	//if (value == 0)
-	//{
-	//	if (loc > PIXELDIM2) return;
-	//	d_DataOut[loc] = value; // b
-	//	d_DataOut[loc + PIXELDIM2] = value; // g
-	//	d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = value; // r
-	//}
-	//else
-	//{
-	//	if (loc > PIXELDIM2) return;
-	//	d_DataOut[loc] = value; // b
-	//	d_DataOut[loc + PIXELDIM2] = value; // g
-	//	d_DataOut[loc + PIXELDIM2 + PIXELDIM2] = 0xBF; // r
-	//}
-
-
 	// get the location
 	int tx = threadIdx.x + blockIdx.x * blockDim.x;
 	int ty = threadIdx.y + blockIdx.y * blockDim.y;
@@ -232,12 +192,14 @@ __global__ void BurningShipHalfPrecisionCu(uchar *d_DataOut, uint limit)
 	half b{ 0.0f };
 	half norm2{ 0.0f };
 	int n;
-	// image zoom and shift to look at ship
-	half x = halfGetX((float)tx, shiftBS2, magBS, (float)PIXELDIM);
-	half y = halfGetY((float)PIXELDIM, (float)ty, shiftBS, magBS, (float)PIXELDIM);
 
-	// iterative fns 
-	for (n = 0; __hlt(norm2, 4.0f) && n < iterationBS; ++n)
+	// image zoom and shift to look at ship
+  double x = getX(tx, shiftBS2, magBS, PIXELDIM);
+  double y = getY(PIXELDIM, ty, shiftBS, magBS, PIXELDIM);
+
+	// iterative fns (half precision)
+  half four{ 4.0f };
+	for (n = 0; __hlt(norm2, four) && n < iterationBS; ++n)
 	{
 		// calculation using instrinics
 		half c = halfGetC(a, b, x);
@@ -247,7 +209,7 @@ __global__ void BurningShipHalfPrecisionCu(uchar *d_DataOut, uint limit)
 	}
 
 	// get the value to color
-	int value = halfValueGet((float)n, (float)iterationBS);
+	int value = valueGet(n, iterationBS);
 	int loc = getLoc(tx, PIXELDIM, ty);
 
 	// color pixel
