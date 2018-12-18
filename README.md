@@ -11,7 +11,7 @@ WhyKay92:
 
 Kiryu:
 - IFS 			  | Sierpinski Carpet     	[Completed]
-- Random Fractals | Brownian Tree           [Completed]
+- Random Fractals | Brownian Tree           [Dropped]
 
 CJ:
 - ETF       | Burning Ship Fractal          [Completed]
